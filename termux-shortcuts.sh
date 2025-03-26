@@ -18,7 +18,7 @@ case $1 in
 		echo "help"
 		;;
 
-	visibillity )
+	visibility )
 		case $2 in
 			on )
 				echo "get"
@@ -28,7 +28,7 @@ case $1 in
 				;;
 
 			"" )
-				echo "help visibillity"
+				echo "help visibility"
 				;;
 			* )
 				invalidCommand $2 "visibilitty"
