@@ -31,7 +31,11 @@ case $1 in
 				;;
 
 			"" )
-				echo "help visibility"
+				file=$(cat $HOME/.termux/termux.properties 2> /dev/null | grep -E '^[^#]')
+				if [[ $file ]]
+					then echo -e $file
+					else echo -e "\nNothing configurations was found.\n"
+				fi
 				;;
 			* )
 				invalidCommand $2 "visibilitty"
