@@ -3,14 +3,17 @@ name=$(echo $0 | sed -E "s/(^\.\\/)|(\.\w+$)//gm")
 
 invalidCommand () {
 	invalid=$1
-	
-	validCommand=$(if [ $2 ]; then echo $2; else echo "<command>"; fi)
-	validOptions=$(if [ $3 ]; then echo $3; else echo "[options]"; fi)
+	paramsList=($2 $3 $4)
 
 	echo -e "\nUsage:"
-	echo -e "  $name $validCommand $validOptions"
+	echo -e "  $name ${paramsList[@]} $invalid"
 
-	echo -e "\nno such option: $invalid"
+	echo -e "\nError:"
+	echo -e "  no such option: $invalid"
+
+	echo -e "\nSuggest:"
+	echo -e "  $name ${paramsList[@]} [-h|--help]\n"
+
 }
 
 case $1 in
