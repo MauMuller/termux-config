@@ -23,8 +23,8 @@ case $1 in
 
 	show )
 		case $2 in
-			on )
-				echo "get"
+			-h | --help )
+				echo "termux-config show --help"
 				;;
 			off )
 				echo "set"
