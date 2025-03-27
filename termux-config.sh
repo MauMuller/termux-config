@@ -44,7 +44,7 @@ case $1 in
 				fi
 				;;
 			* )
-				invalidCommand $2 "visibilitty"
+				invalidCommand $2 "show"
 				;;
 		esac
 		;;
