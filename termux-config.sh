@@ -26,8 +26,14 @@ case $1 in
 			-h | --help )
 				echo "termux-config show --help"
 				;;
-			off )
-				echo "set"
+
+			-a | --all )
+				file=$(cat $HOME/.termux/termux.properties 2> /dev/null)
+
+				if [[ $file ]]
+					then echo -e $file
+					else echo -e "\nNothing file was found.\n"
+				fi
 				;;
 
 			"" )
