@@ -17,7 +17,7 @@ invalidCommand () {
 }
 
 case $1 in
-	"" | --help | -h )
+	"" | -h | --help )
 		echo "help"
 		;;
 
