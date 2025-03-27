@@ -21,7 +21,7 @@ case $1 in
 		echo "help"
 		;;
 
-	visibility )
+	show )
 		case $2 in
 			on )
 				echo "get"
@@ -39,6 +39,10 @@ case $1 in
 		esac
 		;;
 
+	get )
+		;;
+	change )
+		;;
 	* )
 		invalidCommand $1
 		;;
