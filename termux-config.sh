@@ -2,11 +2,10 @@
 name=$(echo $0 | sed -E "s/(^\.\\/)|(\.\w+$)//gm")
 
 usage () {
-	invalid=$1
-	paramsList=($2 $3 $4)
+	paramsList=($1 $2 $3)
 
 	echo -e "\nUsage:"
-	echo -e "  $name ${paramsList[@]} $invalid"
+	echo -e "  $name ${paramsList[@]}"
 }
 
 error () {
@@ -51,7 +50,7 @@ case $1 in
 				fi
 				;;
 			* )
-				usage $2 "show"
+				usage $1 "[options]"
 				error $2
 				suggest $1
 				;;
@@ -63,7 +62,7 @@ case $1 in
 	change )
 		;;
 	* )
-		usage $1
+		usage "<commands>" "[options]"
 		error $1
 		suggest 
 		;;
