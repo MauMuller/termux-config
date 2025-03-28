@@ -28,18 +28,18 @@ case $1 in
 				;;
 
 			-a | --all )
-				file=$(cat $HOME/.termux/termux.properties 2> /dev/null)
+				file="$(cat $HOME/.termux/termux.properties 2> /dev/null)"
 
 				if [[ $file ]]
-					then echo -e $file
+					then echo -e "$file"
 					else echo -e "\nNothing file was found.\n"
 				fi
 				;;
 
 			"" )
-				file=$(cat $HOME/.termux/termux.properties 2> /dev/null | grep -E '^[^#]')
+				file="$(cat $HOME/.termux/termux.properties 2> /dev/null | grep -E '^[^#]')"
 				if [[ $file ]]
-					then echo -e $file
+					then echo -e "$file"
 					else echo -e "\nNothing configurations was found.\n"
 				fi
 				;;
