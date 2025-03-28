@@ -1,19 +1,26 @@
 #!/bin/bash
 name=$(echo $0 | sed -E "s/(^\.\\/)|(\.\w+$)//gm")
 
-invalidCommand () {
+usage () {
 	invalid=$1
 	paramsList=($2 $3 $4)
 
 	echo -e "\nUsage:"
 	echo -e "  $name ${paramsList[@]} $invalid"
+}
+
+error () {
+	invalid=$1
 
 	echo -e "\nError:"
 	echo -e "  no such option: $invalid"
+}
+
+suggest () {
+	paramsList=($1 $2 $3)
 
 	echo -e "\nSuggest:"
 	echo -e "  $name ${paramsList[@]} [-h|--help]\n"
-
 }
 
 case $1 in
@@ -44,7 +51,9 @@ case $1 in
 				fi
 				;;
 			* )
-				invalidCommand $2 "show"
+				usage $2 "show"
+				error $2
+				suggest $1
 				;;
 		esac
 		;;
@@ -54,6 +63,8 @@ case $1 in
 	change )
 		;;
 	* )
-		invalidCommand $1
+		usage $1
+		error $1
+		suggest 
 		;;
 esac
