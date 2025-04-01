@@ -47,7 +47,18 @@ commands () {
 
 case $1 in
 	"" | -h | --help )
-		echo "help"
+		list=(
+			'get=show one/all configuration(s)'
+			'set=change configuration value'
+		)
+
+		separator
+		usage "<command>"
+		separator
+		description "A command line to modify and seetermux configuration easier than manually."
+		separator
+		commands "$list"
+		separator
 		;;
 
 	show )
