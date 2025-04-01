@@ -83,6 +83,15 @@ case $1 in
 				;;
 
 			* )
+				foundKeyValue="$(echo "$termuxFile" | grep -E "^$2")"
+				
+				if [[ "$foundKeyValue" ]] && [[ "$2" ]]
+					then 
+						echo "$foundKeyValue"
+						exit 1
+				fi
+
+				separator
 				usage $1 "[options]"
 				separator
 				error $2
