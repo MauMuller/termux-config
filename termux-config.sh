@@ -61,7 +61,7 @@ case $1 in
 		separator
 		;;
 
-	show )
+	get )
 		case $2 in
 			-h | --help )
 				echo "termux-config show --help"
@@ -94,8 +94,6 @@ case $1 in
 		esac
 		;;
 
-	get )
-		;;
 	change )
 		;;
 	* )
