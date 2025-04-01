@@ -12,7 +12,7 @@ This file will describe some cli possible to do with termux file.
 	termux-config get back-key [--comment|-c]   		// Show commented value
 	termux-config get [--all|-a] [--comment|-c] 		// Show commented values
 	```
-> CHANGE
+> SET
 	```SHELL
 	//Will change keys/values from config
 
