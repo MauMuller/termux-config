@@ -67,18 +67,18 @@ case $1 in
 				echo "termux-config show --help"
 				;;
 
-			-a | --all )
-				file="$(cat $HOME/.termux/termux.properties 2> /dev/null)"
+			-a | --all | -ac )
+				extraParams="$(echo $2 | sed "s/a//gi")"
 
-				if [[ $file ]]
-					then echo -e "$file"
-					else echo -e "\nNothing file was found.\n"
+				if [ "$3" = "-c" ] || [ "$3" = "--comment" ] || [ "$extraParams" = "-c" ] 
+					then file="$termuxFile"
+					else file="$(echo -e "$termuxFile" | grep -E '^[^#]')"
 				fi
 
 
 				if [[ $file ]]
 					then echo -e "$file"
-					else echo -e "\nNothing configurations was found.\n"
+					else echo -e "\nNothing file was found.\n"
 				fi
 				;;
 
