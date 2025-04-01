@@ -2,25 +2,47 @@
 name="$(echo $0 | sed -E "s/(^\.\\/)|(\.\w+$)//gm")"
 termuxFile="$(cat $HOME/.termux/termux.properties 2> /dev/null)"
 
+separator () {
+	echo ""
+}
+
 usage () {
 	paramsList=($1 $2 $3)
 
-	echo -e "\nUsage:"
+	echo -e "Usage:"
 	echo -e "  $name ${paramsList[@]}"
+}
+
+description () {
+	echo -e "Description:"
+	echo -e "  $1"
 }
 
 error () {
 	invalid=$1
 
-	echo -e "\nError:"
+	echo -e "Error:"
 	echo -e "  no such option: $invalid"
 }
 
 suggest () {
 	paramsList=($1 $2 $3)
 
-	echo -e "\nSuggest:"
-	echo -e "  $name ${paramsList[@]} [-h|--help]\n"
+	echo -e "Suggest:"
+	echo -e "  $name ${paramsList[@]} [-h|--help]"
+}
+
+commands () {
+	echo -e "Commands:"
+	list="$1"
+
+	for (( i=0; i<${#list[@]}; i++ ))
+	do
+		name="$(echo ${list[i]} | sed -E 's/=.*//ig')"
+		description="$(echo ${list[i]} | sed -E 's/.*=//ig')"
+		
+		echo -e "  $name\n$description" | pr -2 -at
+	done
 }
 
 case $1 in
