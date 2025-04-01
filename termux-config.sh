@@ -85,8 +85,11 @@ case $1 in
 				;;
 			* )
 				usage $1 "[options]"
+				separator
 				error $2
+				separator
 				suggest $1
+				separator
 				;;
 		esac
 		;;
@@ -96,8 +99,12 @@ case $1 in
 	change )
 		;;
 	* )
+		separator
 		usage "<commands>" "[options]"
+		separator
 		error $1
+		separator
 		suggest 
+		separator
 		;;
 esac
