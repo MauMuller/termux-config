@@ -63,7 +63,7 @@ case $1 in
 
 	get )
 		case $2 in
-			-h | --help )
+			-h | --help | "" )
 				echo "termux-config show --help"
 				;;
 
@@ -74,15 +74,14 @@ case $1 in
 					then echo -e "$file"
 					else echo -e "\nNothing file was found.\n"
 				fi
-				;;
 
-			"" )
-				file="$(cat $HOME/.termux/termux.properties 2> /dev/null | grep -E '^[^#]')"
+
 				if [[ $file ]]
 					then echo -e "$file"
 					else echo -e "\nNothing configurations was found.\n"
 				fi
 				;;
+
 			* )
 				usage $1 "[options]"
 				separator
