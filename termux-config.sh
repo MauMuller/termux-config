@@ -1,5 +1,6 @@
 #!/bin/bash
-name=$(echo $0 | sed -E "s/(^\.\\/)|(\.\w+$)//gm")
+name="$(echo $0 | sed -E "s/(^\.\\/)|(\.\w+$)//gm")"
+termuxFile="$(cat $HOME/.termux/termux.properties 2> /dev/null)"
 
 usage () {
 	paramsList=($1 $2 $3)
