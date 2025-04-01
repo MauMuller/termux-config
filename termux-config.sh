@@ -94,7 +94,8 @@ case $1 in
 		esac
 		;;
 
-	change )
+	set )
+		echo "set"
 		;;
 	* )
 		separator
