@@ -32,9 +32,11 @@ suggest () {
 	echo -e "  $name ${paramsList[@]} [-h|--help]"
 }
 
-commands () {
-	echo -e "Commands:"
-	list="$1"
+listPrinter () {
+	nameSection="$1"
+	list="$2"
+
+	echo -e "$nameSection:"
 
 	for (( i=0; i<${#list[@]}; i++ ))
 	do
@@ -57,7 +59,7 @@ case $1 in
 		separator
 		description "A command line to modify and seetermux configuration easier than manually."
 		separator
-		commands "$list"
+		listPrinter "Commands" "$list"
 		separator
 		;;
 
