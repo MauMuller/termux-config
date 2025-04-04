@@ -96,8 +96,15 @@ case $1 in
 				;;
 
 			* )
-				foundKeyValue="$(echo "$termuxFile" | grep -E "^$2")"
-				
+				regexChecker=""
+
+				if [ "$3" = "-c" ] || [ "$3" = "--comment" ]
+					then regexChecker="^#?$2"
+					else regexChecker="^$2"
+				fi
+
+				foundKeyValue="$(echo "$termuxFile" | grep -E "$regexChecker")"
+
 				if [[ "$foundKeyValue" ]] && [[ "$2" ]]
 					then 
 						echo "$foundKeyValue"
