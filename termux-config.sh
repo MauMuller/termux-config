@@ -66,7 +66,18 @@ case $1 in
 	get )
 		case $2 in
 			-h | --help | "" )
-				echo "termux-config show --help"
+				list=(
+					'-a --all=show full termux configuration.'
+					'-c --comment=show commented (#) options.'
+				)
+
+				separator
+				usage "$1" "(key) | [options]"
+				separator
+				description "Show current [key=value] from termux's configuration file."
+				separator
+				listPrinter "Options list" "$list"
+				separator
 				;;
 
 			-a | --all | -ac )
