@@ -74,7 +74,7 @@ case $1 in
 				separator
 				usage "$1" "(key) | [options]"
 				separator
-				description "Show current [key=value] from termux's configuration file."
+				description "Show current (key=value) from termux's configuration file."
 				separator
 				tableList "Options list" "$list"
 				separator
