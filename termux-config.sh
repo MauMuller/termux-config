@@ -32,7 +32,7 @@ suggest () {
 	echo -e "  $cliName ${paramsList[@]} [-h|--help]"
 }
 
-listPrinter () {
+tableList () {
 	nameSection="$1"
 	list="$2"
 
@@ -59,7 +59,7 @@ case $1 in
 		separator
 		description "A command line to modify and seetermux configuration easier than manually."
 		separator
-		listPrinter "Commands" "$list"
+		tableList "Commands" "$list"
 		separator
 		;;
 
@@ -76,7 +76,7 @@ case $1 in
 				separator
 				description "Show current [key=value] from termux's configuration file."
 				separator
-				listPrinter "Options list" "$list"
+				tableList "Options list" "$list"
 				separator
 				;;
 
