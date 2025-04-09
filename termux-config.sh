@@ -1,5 +1,5 @@
 #!/bin/bash
-name="$(echo $0 | sed -E "s/(^\.\\/)|(\.\w+$)//gm")"
+cliName="$(echo $0 | sed -E "s/(^\.\\/)|(\.\w+$)//gm")"
 termuxFile="$(cat $HOME/.termux/termux.properties 2> /dev/null)"
 
 separator () {
@@ -10,7 +10,7 @@ usage () {
 	paramsList=($1 $2 $3)
 
 	echo -e "Usage:"
-	echo -e "  $name ${paramsList[@]}"
+	echo -e "  $cliName ${paramsList[@]}"
 }
 
 description () {
@@ -29,7 +29,7 @@ suggest () {
 	paramsList=($1 $2 $3)
 
 	echo -e "Suggest:"
-	echo -e "  $name ${paramsList[@]} [-h|--help]"
+	echo -e "  $cliName ${paramsList[@]} [-h|--help]"
 }
 
 listPrinter () {
