@@ -32,6 +32,18 @@ suggest () {
 	echo -e "  $cliName ${paramsList[@]} [-h|--help]"
 }
 
+exemples () {
+	list="$1"
+
+	echo -e "Exemples:"
+
+	for (( i=0; i<${#list[@]}; i++ ))
+	do
+		exemple="${list[$i]}"
+		echo -e "  $exemple"
+	done
+}
+
 tableList () {
 	nameSection="$1"
 	list="$2"
@@ -123,7 +135,22 @@ case $1 in
 		;;
 
 	set )
-		echo "set"
+		case $2 in
+			-h | --help | "" )
+				list=(
+					"$cliName set extra-keys=[[{ key: RIGHT, popup: END }]]"
+					"$cliName set back-key=back"
+				)
+
+				separator
+				usage "$1" "(key=value)"
+				separator
+				description "Set value at termux's configuration file."
+				separator
+				exemples "$list"
+				separator
+				;;
+		esac
 		;;
 	* )
 		separator
