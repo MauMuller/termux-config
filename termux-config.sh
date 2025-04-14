@@ -65,14 +65,14 @@ case $1 in
 	"" | -h | --help )
 		list=(
 			'show-all=show all configurations'
-			'get=get key=value configuration'
+			'get=show key value configuration'
 			'set=change configuration value'
 		)
 
 		separator
 		usage "<command>"
 		separator
-		description "A command line to modify and seetermux configuration easier than manually."
+		description "A command line to show and modify termux configuration easier than manually."
 		separator
 		tableList "Commands" "$list"
 		separator
