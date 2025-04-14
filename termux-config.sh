@@ -1,6 +1,8 @@
 #!/bin/bash
-name="$(echo $0 | sed -E "s/(^\.\\/)|(\.\w+$)//gm")"
-termuxFile="$(cat $HOME/.termux/termux.properties 2> /dev/null)"
+cliName="$(echo $0 | sed -E "s/(^\.\\/)|(\.\w+$)//gm")"
+
+termuxFileDir="$HOME/.termux/termux.properties"
+termuxFile="$(cat "$termuxFileDir" 2> /dev/null)"
 
 separator () {
 	echo ""
@@ -10,7 +12,7 @@ usage () {
 	paramsList=($1 $2 $3)
 
 	echo -e "Usage:"
-	echo -e "  $name ${paramsList[@]}"
+	echo -e "  $cliName ${paramsList[@]}"
 }
 
 description () {
@@ -29,10 +31,22 @@ suggest () {
 	paramsList=($1 $2 $3)
 
 	echo -e "Suggest:"
-	echo -e "  $name ${paramsList[@]} [-h|--help]"
+	echo -e "  $cliName ${paramsList[@]} [-h|--help]"
 }
 
-listPrinter () {
+exemples () {
+	list="$1"
+
+	echo -e "Exemples:"
+
+	for (( i=0; i<${#list[@]}; i++ ))
+	do
+		exemple="${list[$i]}"
+		echo -e "  $exemple"
+	done
+}
+
+tableList () {
 	nameSection="$1"
 	list="$2"
 
@@ -50,7 +64,8 @@ listPrinter () {
 case $1 in
 	"" | -h | --help )
 		list=(
-			'get=show one/all configuration(s)'
+			'show-all=show all configurations'
+			'get=get key=value configuration'
 			'set=change configuration value'
 		)
 
@@ -59,40 +74,61 @@ case $1 in
 		separator
 		description "A command line to modify and seetermux configuration easier than manually."
 		separator
-		listPrinter "Commands" "$list"
+		tableList "Commands" "$list"
 		separator
+		;;
+
+	show-all )
+		case $2 in
+			"" )
+				echo "$(echo -e "$termuxFile" | grep -E '^[^#]')"
+				;;
+			-c | --comment )
+				echo "$termuxFile"
+				;;
+			-h | --help )
+				list=(
+					'-c --comment=show commented (#) options.'
+				)
+
+				separator
+				usage "$1" "[options]"
+				separator
+				description "Show all configurations from file"
+				separator
+				tableList "Options list" "$list"
+				separator
+				;;
+			* )
+				list=(
+					'-c --comment=show commented (#) options.'
+				)
+
+				separator
+				usage "$1" "[options]"
+				separator
+				error "$2"
+				separator
+				tableList "Options list" "$list"
+				separator
+				;;
+		esac
 		;;
 
 	get )
 		case $2 in
 			-h | --help | "" )
 				list=(
-					'-a --all=show full termux configuration.'
 					'-c --comment=show commented (#) options.'
 				)
 
 				separator
 				usage "$1" "(key) | [options]"
 				separator
-				description "Show current [key=value] from termux's configuration file."
+				description "Show current (key=value) from termux's configuration file."
 				separator
-				listPrinter "Options list" "$list"
+				tableList "Options list" "$list"
 				separator
-				;;
-
-			-a | --all | -ac )
-				extraParams="$(echo $2 | sed "s/a//gi")"
-
-				if [ "$3" = "-c" ] || [ "$3" = "--comment" ] || [ "$extraParams" = "-c" ] 
-					then file="$termuxFile"
-					else file="$(echo -e "$termuxFile" | grep -E '^[^#]')"
-				fi
-
-
-				if [[ $file ]]
-					then echo -e "$file"
-					else echo -e "\nNothing file was found.\n"
-				fi
 				;;
 
 			* )
@@ -123,7 +159,49 @@ case $1 in
 		;;
 
 	set )
-		echo "set"
+		case $2 in
+			-h | --help | "" )
+				list=(
+					"$cliName set extra-keys=[[{ key: RIGHT, popup: END }]]"
+					"$cliName set back-key=back"
+				)
+
+				separator
+				usage "$1" "(key=value)"
+				separator
+				description "Set value at termux's configuration file."
+				separator
+				exemples "$list"
+				separator
+				;;
+			* )
+				isValidFormat="$(echo $2 | grep -E "^\S+=\S+$")"
+
+				if [ ! $isValidFormat ]
+					then 
+						separator
+						usage $1 "(key=value)"
+						separator
+						error $2
+						separator
+						suggest $1
+						separator
+						exit
+				fi
+
+				key="$(echo "$2" | sed -E "s/=.+//gi")"
+				value="$(echo "$2" | sed -E "s/.+=//gi")"
+
+				doesPropertyExist="$(echo "$termuxFile" | grep -E "^$key")"
+
+				if [ "$doesPropertyExist" ]
+					then
+						echo "$(echo "$termuxFile" | sed -E "s/$key\s?=\s?.+/$key = $value/gi")" > "$termuxFileDir"
+					else 
+						echo -e "\n$key = $value" >> "$termuxFileDir"
+
+				fi
+		esac
 		;;
 	* )
 		separator
