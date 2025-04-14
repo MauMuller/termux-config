@@ -1,6 +1,8 @@
 #!/bin/bash
 cliName="$(echo $0 | sed -E "s/(^\.\\/)|(\.\w+$)//gm")"
-termuxFile="$(cat $HOME/.termux/termux.properties 2> /dev/null)"
+
+termuxFileDir="$HOME/.termux/termux.properties"
+termuxFile="$(cat "$termuxFileDir" 2> /dev/null)"
 
 separator () {
 	echo ""
