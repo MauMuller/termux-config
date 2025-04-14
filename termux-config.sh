@@ -64,7 +64,8 @@ tableList () {
 case $1 in
 	"" | -h | --help )
 		list=(
-			'get=show one/all configuration(s)'
+			'show-all=show all configurations'
+			'get=get key=value configuration'
 			'set=change configuration value'
 		)
 
@@ -77,11 +78,47 @@ case $1 in
 		separator
 		;;
 
+	show-all )
+		case $2 in
+			"" )
+				echo "$(echo -e "$termuxFile" | grep -E '^[^#]')"
+				;;
+			-c | --comment )
+				echo "$termuxFile"
+				;;
+			-h | --help )
+				list=(
+					'-c --comment=show commented (#) options.'
+				)
+
+				separator
+				usage "$1" "[options]"
+				separator
+				description "Show all configurations from file"
+				separator
+				tableList "Options list" "$list"
+				separator
+				;;
+			* )
+				list=(
+					'-c --comment=show commented (#) options.'
+				)
+
+				separator
+				usage "$1" "[options]"
+				separator
+				error "$2"
+				separator
+				tableList "Options list" "$list"
+				separator
+				;;
+		esac
+		;;
+
 	get )
 		case $2 in
 			-h | --help | "" )
 				list=(
-					'-a --all=show full termux configuration.'
 					'-c --comment=show commented (#) options.'
 				)
 
@@ -92,21 +129,6 @@ case $1 in
 				separator
 				tableList "Options list" "$list"
 				separator
-				;;
-
-			-a | --all | -ac )
-				extraParams="$(echo $2 | sed "s/a//gi")"
-
-				if [ "$3" = "-c" ] || [ "$3" = "--comment" ] || [ "$extraParams" = "-c" ] 
-					then file="$termuxFile"
-					else file="$(echo -e "$termuxFile" | grep -E '^[^#]')"
-				fi
-
-
-				if [[ $file ]]
-					then echo -e "$file"
-					else echo -e "\nNothing file was found.\n"
-				fi
 				;;
 
 			* )
