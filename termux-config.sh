@@ -174,6 +174,33 @@ case $1 in
 				exemples "$list"
 				separator
 				;;
+			* )
+				isValidFormat="$(echo $2 | grep -E "^\S+=\S+$")"
+
+				if [ ! $isValidFormat ]
+					then 
+						separator
+						usage $1 "(key=value)"
+						separator
+						error $2
+						separator
+						suggest $1
+						separator
+						exit
+				fi
+
+				key="$(echo "$2" | sed -E "s/=.+//gi")"
+				value="$(echo "$2" | sed -E "s/.+=//gi")"
+
+				doesPropertyExist="$(echo "$termuxFile" | grep -E "^$key")"
+
+				if [ "$doesPropertyExist" ]
+					then
+						echo "$(echo "$termuxFile" | sed -E "s/$key\s?=\s?.+/$key = $value/gi")" > "$termuxFileDir"
+					else 
+						echo -e "\n$key = $value" >> "$termuxFileDir"
+
+				fi
 		esac
 		;;
 	* )
