@@ -162,8 +162,8 @@ case $1 in
 		case $2 in
 			-h | --help | "" )
 				list=(
-					"$cliName set extra-keys=[[{ key: RIGHT, popup: END }]]"
-					"$cliName set back-key=back"
+					"$cliName set extra-keys='[[{ key: RIGHT, popup: END }]]'"
+					"$cliName set back-key='back'"
 				)
 
 				separator
