@@ -62,7 +62,7 @@ tableList () {
 		name="$(echo ${list[i]} | sed -E 's/=.*//ig')"
 		description="$(echo ${list[i]} | sed -E 's/.*=//ig')"
 		
-		echo -e "  $name\n$description" | pr -2 -at
+		echo -e "  $name\n$description" | pr -2 -at -w 95
 	done
 }
 
