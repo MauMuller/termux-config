@@ -175,7 +175,7 @@ case $1 in
 				separator
 				;;
 			* )
-				isValidFormat="$(echo $2 | grep -E "^\S+=\S+$")"
+				isValidFormat="$(echo $2 | grep -E "^\S+=.*$")"
 
 				if [ ! $isValidFormat ]
 					then 
@@ -189,14 +189,14 @@ case $1 in
 						exit
 				fi
 
-				key="$(echo "$2" | sed -E "s/=.+//gi")"
-				value="$(echo "$2" | sed -E "s/.+=//gi")"
+				key="$(echo "$2" | sed -E "s/\s?\=.*//gi")"
+				value="$(echo "$2" | sed -E "s/.+\=\s?//gi")"
 
 				doesPropertyExist="$(echo "$termuxFile" | grep -E "^$key")"
 
 				if [ "$doesPropertyExist" ]
 					then
-						echo "$(echo "$termuxFile" | sed -E "s/$key\s?=\s?.+/$key = $value/gi")" > "$termuxFileDir"
+						echo "$(echo "$termuxFile" | sed -E "s/$key\s?=.*$/$key = $value/gi")" > "$termuxFileDir"
 					else 
 						echo -e "\n$key = $value" >> "$termuxFileDir"
 
