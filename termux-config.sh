@@ -20,6 +20,11 @@ description () {
 	echo -e "  $1"
 }
 
+observation () {
+	echo -e "  Observation:"
+	echo -e "  $1"
+}
+
 error () {
 	invalid=$1
 
@@ -127,6 +132,8 @@ case $1 in
 				separator
 				description "Show current (key=value) from termux's configuration file."
 				separator
+				observation "Use can type just inicial words from key."
+				separator
 				tableList "Options list" "$list"
 				separator
 				;;
@@ -170,6 +177,8 @@ case $1 in
 				usage "$1" "(key=value)"
 				separator
 				description "Set value at termux's configuration file."
+				separator
+				observation "It's recommend use (') after (=) to avoid sintax error."
 				separator
 				exemples "$list"
 				separator
