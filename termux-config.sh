@@ -141,7 +141,7 @@ case $1 in
 
 				foundKeyValue="$(echo "$termuxFile" | grep -E "$regexChecker")"
 
-				if [[ "$foundKeyValue" ]] && [[ "$2" ]]
+				if [ "$foundKeyValue" ] && [ "$2" ]
 					then 
 						echo "$foundKeyValue"
 						exit 1
@@ -177,7 +177,7 @@ case $1 in
 			* )
 				isValidFormat="$(echo $2 | grep -E "^\S+=.*$")"
 
-				if [ ! $isValidFormat ]
+				if [ ! "$isValidFormat" ]
 					then 
 						separator
 						usage $1 "(key=value)"
