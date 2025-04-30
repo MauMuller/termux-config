@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -e
+
 error () {
 	echo -e "\n \033[1m\033[31m[Error] $1\\033[0m\n"
 }
