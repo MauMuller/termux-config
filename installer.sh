@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 error () {
@@ -66,7 +65,7 @@ termuxConfigFile="$($httpTool "https://raw.githubusercontent.com/MauMuller/termu
 echo -e "$termuxConfigFile" > "$scriptPath/$scriptName"
 chmod a+x "$scriptPath/$scriptName"
 
-echo -e "\n Do you like to configure PATH automatically for command line? [y|n]"
+echo -e "\n Do you want to configure PATH automatically for command line? [y|n]"
 echo -e " (default: y)\n"
 read -p " > " automaticResponse
 
