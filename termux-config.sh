@@ -1,5 +1,5 @@
 #!/bin/bash
-cliName="$(echo $0 | sed -E "s/(^\.\\/)|(\.\w+$)//gm")"
+cliName="termux-config"
 
 termuxFileDir="$HOME/.termux/termux.properties"
 termuxFile="$(cat "$termuxFileDir" 2> /dev/null)"
