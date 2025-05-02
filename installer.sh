@@ -103,8 +103,8 @@ case "$automaticResponse" in
 				;;
 		esac
 
-		export PATH="$dirConfigPath" >> "$configPath"
 		echo -e "export PATH=\"$dirConfigPath\"" >> "$configPath"
+		source "$configPath"
 
 		echo -e "\n\033[1mAutomatic Configuration\033[0m"
 		echo -e "\n Config PATH found:"
