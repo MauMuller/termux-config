@@ -64,6 +64,7 @@ fi
 termuxConfigFile="$($httpTool "https://raw.githubusercontent.com/MauMuller/termux-config/refs/tags/$versionInstaller/termux-config.sh")"
 
 echo -e "$termuxConfigFile" > "$scriptPath/$scriptName"
+chmod a+x "$scriptPath/$scriptName"
 
 echo -e "\n Do you like to configure PATH automatically for command line? [y|n]"
 echo -e " (default: y)\n"
