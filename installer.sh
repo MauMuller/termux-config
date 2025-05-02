@@ -34,10 +34,36 @@ if [ ! -d "$dirInstaller" ]
 		exit 1;
 fi
 
-URL="https://raw.githubusercontent.com/MauMuller/termux-config/refs/heads/main/termux-config.sh"
+tagsURL="https://api.github.com/repos/MauMuller/termux-config/tags"
 httpTool=$(if [ "type -t curl 2>&1" ]; then echo 'curl'; else echo 'wget'; fi)
+rawVersions=""
 
+case "$httpTool" in
+	curl)
+		rawVersions=$(curl -fsL --show-error "$tagsURL")
+		;;
+	wget)
+		rawVersions=$(wget -q --content-on-error -O - "$tagsURL")
+		;;
+esac
+
+formatedVersions=$(echo "$rawVersions" | grep -E "name" | sed -E "s/\s|,|\"//gi" | sed -E "s/name?:/ /gi")
+
+echo -e "\n\033[1mVersion\033[0m"
+echo -e "\n Choose a version to install:"
+echo -e "$(echo "$formatedVersions" | head | pr -2 -at -w 95)"
+echo -e "\n For others, see the following link:"
+echo -e " https://api.github.com/repos/MauMuller/termux-config/tags"
+echo -e "\n (default: latest)\n"
+read -p " > " versionInstaller
+
+if [ ! "$versionInstaller" ] || [[ "$versionInstaller" =~ LATEST|latest ]] 
+	then versionInstaller="$(echo "$formatedVersions" | sed -E "s/\s|//gi" | head -n 1)"
 fi
+
+termuxConfigFile="$($httpTool "https://raw.githubusercontent.com/MauMuller/termux-config/refs/tags/$versionInstaller/termux-config.sh")"
+
+echo -e "$termuxConfigFile" > "$scriptPath/$scriptName"
 
 echo -e "\n Do you like to configure PATH automatically for command line? [y|n]"
 echo -e " (default: y)\n"
