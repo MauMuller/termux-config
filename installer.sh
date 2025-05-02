@@ -35,20 +35,8 @@ if [ ! -d "$dirInstaller" ]
 fi
 
 URL="https://raw.githubusercontent.com/MauMuller/termux-config/refs/heads/main/termux-config.sh"
+httpTool=$(if [ "type -t curl 2>&1" ]; then echo 'curl'; else echo 'wget'; fi)
 
-if [ "$(type -t curl 2>&1)" ]
-	then 
-		echo -e "\n Downloading:"
-		curl -L "$URL" >> "$scriptPath/$scriptName.sh"
-		echo ""
-	else 
-		if [ "$(type -t wget 2>&1)" ] 
-			then 
-				wget "$URL" >> "$scriptPath/$scriptName.sh"
-			else
-				error "Wasnt find WGET or CURL commands."
-				exit 1;
-		fi
 fi
 
 echo -e "\n Do you like to configure PATH automatically for command line? [y|n]"
