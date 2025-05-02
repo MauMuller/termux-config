@@ -6,6 +6,8 @@ error () {
 }
 
 scriptName="termux-config"
+user="MauMuller"
+repo="$scriptName"
 
 clear
 
@@ -33,7 +35,7 @@ if [ ! -d "$dirInstaller" ]
 		exit 1;
 fi
 
-tagsURL="https://api.github.com/repos/MauMuller/termux-config/tags"
+tagsURL="https://api.github.com/repos/$user/$repo/tags"
 httpTool=$(if [ "type -t curl 2>&1" ]; then echo 'curl'; else echo 'wget'; fi)
 rawVersions=""
 
@@ -52,7 +54,7 @@ echo -e "\n\033[1mVersion\033[0m"
 echo -e "\n Choose a version to install:"
 echo -e "$(echo "$formatedVersions" | head | pr -2 -at -w 95)"
 echo -e "\n For others, see the following link:"
-echo -e " https://api.github.com/repos/MauMuller/termux-config/tags"
+echo -e " $tagsURL"
 echo -e "\n (default: latest)\n"
 read -p " > " versionInstaller
 
@@ -60,7 +62,7 @@ if [ ! "$versionInstaller" ] || [[ "$versionInstaller" =~ LATEST|latest ]]
 	then versionInstaller="$(echo "$formatedVersions" | sed -E "s/\s|//gi" | head -n 1)"
 fi
 
-termuxConfigFile="$($httpTool "https://raw.githubusercontent.com/MauMuller/termux-config/refs/tags/$versionInstaller/termux-config.sh")"
+termuxConfigFile="$($httpTool "https://raw.githubusercontent.com/$user/$repo/refs/tags/$versionInstaller/$scriptName.sh")"
 
 echo -e "$termuxConfigFile" > "$scriptPath/$scriptName"
 chmod a+x "$scriptPath/$scriptName"
