@@ -90,10 +90,12 @@ dirConfigPath="\$PATH:$scriptPath"
 case "$automaticResponse" in
 	n|N)
 		echo -e "\n\033[1mManual Configuration\033[0m"
-		echo -e "\n Add the following to your config file (Ex: .bashrc):"
-		echo -e "\n\t[\033[3m.bashrc]\033[0m\n\texport \"\$PATH:$dirInstaller/.$scriptName\""
-		echo -e "\n Reset environment configurations (Ex: .bashrc):"
-		echo -e "\n\t\033[3m[shell]\033[0m\n\tsource .bashrc"
+		echo -e "\n \033[1mObservation\033[0m: this exemple use \033[1m.bashrc\033[0m to ilustrate the steps, but you can use any other like: .zshrc, .config/fish/fish.config, etc."
+		echo -e "\n \033[1mSteps\033[0m"
+		echo -e "\n 1. Add the following to your config file:"
+		echo -e "\n\t export PATH=\"\$PATH:$dirInstaller/.$scriptName/bin\""
+		echo -e "\n 2. Reset environment configurations:"
+		echo -e "\n\t source \$HOME/.bashrc"
 		;;
 	y|Y)
 		currentShell="$(echo $SHELL | sed -E "s/.*\///ig")"
