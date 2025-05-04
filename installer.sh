@@ -131,5 +131,4 @@ case "$automaticResponse" in
 esac
 
 echo -e "\n\033[1mFinal Step\033[0m"
-echo -e "\n After followed configurations steps, everthing usually be ok."
 echo -e " Now, just type by: \033[1m\033[93m$scriptName\\033[0m\n"
