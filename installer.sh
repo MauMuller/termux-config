@@ -62,9 +62,19 @@ if [ ! "$versionInstaller" ] || [[ "$versionInstaller" =~ LATEST|latest ]]
 	then versionInstaller="$(echo "$formatedVersions" | sed -E "s/\s|//gi" | head -n 1)"
 fi
 
-termuxConfigFile="$($httpTool "https://raw.githubusercontent.com/$user/$repo/refs/tags/$versionInstaller/$scriptName.sh")"
+termuxConfigURL="https://raw.githubusercontent.com/$user/$repo/refs/tags/$versionInstaller/$scriptName.sh"
+termuxConfigContent=""
 
-echo -e "$termuxConfigFile" > "$scriptPath/$scriptName"
+case "$httpTool" in
+	curl)
+		termuxConfigContent=$(curl -fsL --show-error "$termuxConfigURL")
+		;;
+	wget)
+		termuxConfigContent=$(wget -q --content-on-error -O - "$termuxConfigURL")
+		;;
+esac
+
+echo -e "$termuxConfigContent" > "$scriptPath/$scriptName"
 chmod a+x "$scriptPath/$scriptName"
 
 echo -e "\n Do you want to configure PATH automatically for command line? [y|n]"
