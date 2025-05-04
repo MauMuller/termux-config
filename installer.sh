@@ -77,58 +77,15 @@ esac
 echo -e "$termuxConfigContent" > "$scriptPath/$scriptName"
 chmod a+x "$scriptPath/$scriptName"
 
-echo -e "\n Do you want to configure PATH automatically for command line? [y|n]"
-echo -e " (default: y)\n"
-read -p " > " automaticResponse
-
-if [ ! "$automaticResponse" ] 
-	then automaticResponse="y"
-fi
-
-dirConfigPath="\$PATH:$scriptPath"
-
-case "$automaticResponse" in
-	n|N)
-		echo -e "\n\033[1mManual Configuration\033[0m"
-		echo -e "\n \033[1mObservation\033[0m: this exemple use \033[1m.bashrc\033[0m to ilustrate the steps, but you can use any other like: .zshrc, .config/fish/fish.config, etc."
-		echo -e "\n \033[1mSteps\033[0m"
-		echo -e "\n 1. Add the following to your config file:"
-		echo -e "\n\t export PATH=\"\$PATH:$dirInstaller/.$scriptName/bin\""
-		echo -e "\n 2. Reset environment configurations:"
-		echo -e "\n\t source \$HOME/.bashrc"
-		;;
-	y|Y)
-		currentShell="$(echo $SHELL | sed -E "s/.*\///ig")"
-		configPath=""
-
-		case "$currentShell" in
-			bash )
-				configPath="$HOME/.bashrc"
-				;;
-			zsh )
-				configPath="$HOME/.zshrc"
-				;;
-			fish )
-				configPath="$HOME/.config/fish/config.fish"
-				;;
-			* )
-				configPath="$HOME/.profile"
-				;;
-		esac
-
-		echo -e "export PATH=\"$dirConfigPath\"" >> "$configPath"
-		source "$configPath"
-
-		echo -e "\n\033[1mAutomatic Configuration\033[0m"
-		echo -e "\n Config PATH found:"
-		echo -e "\n\t$configPath"
-		echo -e "\n Script added on config:"
-		echo -e "\n\t[\033[3m$configPath]\033[0m\n\texport \"\$PATH:$scriptPath\""
-		;;
-	*)
-		error "Invalid response."
-		exit 1;
-esac
+echo -e "\n\033[1mConfiguration\033[0m"
+echo -e "\n \033[2mObservation\033[0m:\n"
+echo -e "   This exemple use \033[4m.bashrc\033[0m to ilustrate the steps."
+echo -e "   But you can use any other like: .zshrc, .config/fish/fish.config, etc."
+echo -e "\n \033[2mSteps\033[0m"
+echo -e "\n   1. Add the following to your config file:"
+echo -e "\n\t export PATH=\"\$PATH:$dirInstaller/.$scriptName/bin\""
+echo -e "\n   2. Reset environment configurations:"
+echo -e "\n\t source \$HOME/.bashrc"
 
 echo -e "\n\033[1mFinal Step\033[0m"
 echo -e " Now, just type by: \033[1m\033[93m$scriptName\\033[0m\n"
