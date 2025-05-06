@@ -2,7 +2,7 @@
 
 Manipulate your [termux](https://github.com/termux/termux-app) file configurations with command line.
 
-- Change just specific configurion without modify anyother;
+- Change just specific configurion without modify any other;
 - Rapidly make changes on your file;
 
 Exemple:
@@ -25,7 +25,7 @@ foo@bar:~$
 
 # Why
 
-We alredy have **termux.properties** inside **˜/.termux**, it's works well and is easy to manager, but isnt fast to make changes.
+We alredy have **termux.properties** inside **~/.termux**, it's works well and is easy to manager, but isnt fast to make changes.
 This is why i have created this project, to be faster to make modifies at config.
 
 Another motivation is to automate some configs by command line without replace another configurations.
