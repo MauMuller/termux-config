@@ -1,5 +1,5 @@
 #!/bin/bash
-cliName="$(echo $0 | sed -E "s/(^\.\\/)|(\.\w+$)//gm")"
+cliName="termux-config"
 
 termuxFileDir="$HOME/.termux/termux.properties"
 termuxFile="$(cat "$termuxFileDir" 2> /dev/null)"
@@ -17,6 +17,11 @@ usage () {
 
 description () {
 	echo -e "Description:"
+	echo -e "  $1"
+}
+
+observation () {
+	echo -e "  Observation:"
 	echo -e "  $1"
 }
 
@@ -57,7 +62,7 @@ tableList () {
 		name="$(echo ${list[i]} | sed -E 's/=.*//ig')"
 		description="$(echo ${list[i]} | sed -E 's/.*=//ig')"
 		
-		echo -e "  $name\n$description" | pr -2 -at
+		echo -e "  $name\n$description" | pr -2 -at -w 95
 	done
 }
 
@@ -65,14 +70,14 @@ case $1 in
 	"" | -h | --help )
 		list=(
 			'show-all=show all configurations'
-			'get=get key=value configuration'
+			'get=show key value configuration'
 			'set=change configuration value'
 		)
 
 		separator
 		usage "<command>"
 		separator
-		description "A command line to modify and seetermux configuration easier than manually."
+		description "A command line to show and modify termux configuration easier than manually."
 		separator
 		tableList "Commands" "$list"
 		separator
@@ -123,9 +128,11 @@ case $1 in
 				)
 
 				separator
-				usage "$1" "(key) | [options]"
+				usage "$1" "(key) [options]"
 				separator
 				description "Show current (key=value) from termux's configuration file."
+				separator
+				observation "Use can type just inicial words from key."
 				separator
 				tableList "Options list" "$list"
 				separator
@@ -141,14 +148,14 @@ case $1 in
 
 				foundKeyValue="$(echo "$termuxFile" | grep -E "$regexChecker")"
 
-				if [[ "$foundKeyValue" ]] && [[ "$2" ]]
+				if [ "$foundKeyValue" ] && [ "$2" ]
 					then 
 						echo "$foundKeyValue"
 						exit 1
 				fi
 
 				separator
-				usage $1 "[options]"
+				usage $1 "(key) [options]"
 				separator
 				error $2
 				separator
@@ -162,8 +169,8 @@ case $1 in
 		case $2 in
 			-h | --help | "" )
 				list=(
-					"$cliName set extra-keys=[[{ key: RIGHT, popup: END }]]"
-					"$cliName set back-key=back"
+					"$cliName set extra-keys='[[{ key: RIGHT, popup: END }]]'"
+					"$cliName set back-key='back'"
 				)
 
 				separator
@@ -171,13 +178,15 @@ case $1 in
 				separator
 				description "Set value at termux's configuration file."
 				separator
+				observation "It's recommend use (') after (=) to avoid sintax error."
+				separator
 				exemples "$list"
 				separator
 				;;
 			* )
-				isValidFormat="$(echo $2 | grep -E "^\S+=\S+$")"
+				isValidFormat="$(echo $2 | grep -E "^\S+=.*$")"
 
-				if [ ! $isValidFormat ]
+				if [ ! "$isValidFormat" ]
 					then 
 						separator
 						usage $1 "(key=value)"
@@ -189,14 +198,14 @@ case $1 in
 						exit
 				fi
 
-				key="$(echo "$2" | sed -E "s/=.+//gi")"
-				value="$(echo "$2" | sed -E "s/.+=//gi")"
+				key="$(echo "$2" | sed -E "s/\s?\=.*//gi")"
+				value="$(echo "$2" | sed -E "s/.+\=\s?//gi")"
 
 				doesPropertyExist="$(echo "$termuxFile" | grep -E "^$key")"
 
 				if [ "$doesPropertyExist" ]
 					then
-						echo "$(echo "$termuxFile" | sed -E "s/$key\s?=\s?.+/$key = $value/gi")" > "$termuxFileDir"
+						echo "$(echo "$termuxFile" | sed -E "s/$key\s?=.*$/$key = $value/gi")" > "$termuxFileDir"
 					else 
 						echo -e "\n$key = $value" >> "$termuxFileDir"
 
