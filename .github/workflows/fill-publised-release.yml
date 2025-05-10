@@ -7,20 +7,35 @@ on:
 defaults:
   run:
     shell: bash
-env:
-  API_URL: ${{ github.api_url }}
-  REPO: ${{ github.repository }}
-  OWNER: ${{ github.repository_owner }}
-  TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
+  create-url-api:
+    name: Create a URL to fetch data
+    runs-on: ubuntu-latest
+    env:
+      PROTOCOL_AND_DOMAIN: ${{ github.api_url }}
+      OWNER_REPO: ${{ github.repository }}
+      OWNER: ${{ github.repository_owner }}
+    outputs:
+      URL: ${{ steps.creation.outputs.URL }}
+    steps:
+      - id: creation
+        name: Creating URL formatting GITHUB_REPOSITORY
+        run: |
+          REPO=$(echo "$OWNER_REPO" | sed -E "s/.+\///gi")  
+          echo "URL=$PROTOCOL_AND_DOMAIN/repos/$OWNER/$REPO" >> "$GITHUB_OUTPUT"
+
   get-last-release:
     name: Get last release
     runs-on: ubuntu-latest
+    needs: [create-url-api]
+    env:
+      API_URL: ${{ needs.create-url-api.outputs.URL }}
+      TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Get all tags
         run: |
           curl \
           --request GET \
-          --url "$API_URL/repos/$OWNER/$REPO/git/refs/tags" \
+          --url "$API_URL/git/refs/tags" \
           --header "Accept: application/vnd.github+json" \
           --header "Authorization: Bearer $TOKEN"
