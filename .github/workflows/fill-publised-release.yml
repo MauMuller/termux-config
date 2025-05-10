@@ -9,8 +9,8 @@ defaults:
     shell: bash
 env:
   API_URL: ${{ github.api_url }}
-  REPO: ${{ github.GITHUB_REPOSITORY }}
-  OWNER: ${{ github.GITHUB_REPOSITORY_OWNER }}
+  REPO: ${{ github.repository }}
+  OWNER: ${{ github.repository_owner }}
   TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   get-last-release:
