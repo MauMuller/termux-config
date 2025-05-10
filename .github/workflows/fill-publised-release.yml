@@ -7,10 +7,20 @@ on:
 defaults:
   run:
     shell: bash
+env:
+  API_URL: ${{ github.api_url }}
+  REPO: ${{ github.GITHUB_REPOSITORY }}
+  OWNER: ${{ github.GITHUB_REPOSITORY_OWNER }}
+  TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   get-last-release:
     name: Get last release
     runs-on: ubuntu-latest
     steps:
       - name: Get all tags
-        run: echo "${{ github.api_url }}/repost/MauMuller/releases"
+        run: |
+          curl \
+          --request GET \
+          --url "$API_URL/repos/$OWNER/$REPO/git/refs/tags" \
+          --header "Accept: application/vnd.github+json" \
+          --header "Authorization: Bearer $TOKEN"
