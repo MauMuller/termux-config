@@ -1,14 +1,12 @@
 name: Fill last published release
-on: workflow_dispatch
-
+on: 
+  workflow_dispatch:
+  push:
+    branches:
+      - config/actions
 defaults:
   run:
     shell: bash
-
-# Obter último commit com release
-# pegar todos os commits feitos a partir desse
-# preencher a nova release criada
-
 jobs:
   get-last-release:
     name: Get last release
