@@ -10,7 +10,7 @@ defaults:
 jobs:
   get-last-release:
     name: Get last release
-    runs-on: ubuntu-24.02
+    runs-on: ubuntu-latest
     steps:
       - name: Get all tags
         run: echo "${{ github.api_url }}/repost/MauMuller/releases"
