@@ -59,9 +59,8 @@ jobs:
         run: echo "JSON_DATA='{ \"tag_name\":\"$LATEST_TAG\" }'" >> "$GITHUB_OUTPUT"
       - name: Generate a release
         run: curl -L \
-            -request POST \
+            --request POST \
             --url "$API_URL/releases/generate-notes" \
             --header "Accept:application/vnd.github+json" \
-            --header "Authorization:Bearer $TOKEN"
+            --header "Authorization:Bearer $TOKEN" \
             --data '${{ step.generate-release-note.JSON_DATA }}' 
-
