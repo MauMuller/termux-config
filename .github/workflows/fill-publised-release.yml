@@ -63,4 +63,4 @@ jobs:
             --url "$API_URL/releases/generate-notes" \
             --header "Accept:application/vnd.github+json" \
             --header "Authorization:Bearer $TOKEN" \
-            --data '${{ step.generate-release-note.JSON_DATA }}' 
+            --data '${{ steps.generate-release-note.JSON_DATA }}' 
