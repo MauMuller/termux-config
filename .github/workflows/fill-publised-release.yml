@@ -36,9 +36,9 @@ jobs:
         name: Fetching Tags
         run: echo "ALL_TAGS=$(curl \
           --request GET \
-          --url "$API_URL/git/refs/tags" \
           --header "Accept:application/vnd.github+json" \
-          --header "Authorization:Bearer $TOKEN")" >> "$GITHUB_OUTPUT"
+          --header "Authorization:Bearer $TOKEN"
+          --url "$API_URL/git/refs/tags")" >> "$GITHUB_OUTPUT"
       - id: get-refs
         name: Get refs
         run: echo "REFS_TAGS=$(echo ${{ steps.fetching-tags.outputs.ALL_TAGS }}" | jq "$[].ref")" >> "$GITHUB_OUTPUT"
