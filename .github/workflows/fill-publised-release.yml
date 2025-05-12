@@ -45,7 +45,7 @@ jobs:
       - id: get-latest-ref
         name: Get latest ref
         run: echo "LATEST_REF=$(echo ${{ steps.get-refs.outputs.REFS_TAGS }}" | tail -n 1)" >> "$GITHUB_OUTPUT"
-        name: Format lastest and output tag name
+      - name: Format lastest and output tag name
         run: echo "LATEST_TAG=$(echo ${{ steps.get-latest-ref.outputs.LATEST_REF }}" | sed -E "s/.+\///gi")" >> "$GITHUB_OUTPUT"
   generate-release-note:
     name: Generate a release notes
@@ -56,7 +56,7 @@ jobs:
       LATEST_TAG: ${{ needs.create-url-api.outputs.LATEST_TAG }}
     steps:
       - name: Mount JSON data
-        run: echo "JSON_DATA='{ "tag_name": "$LATEST_TAG" }'" >> "$GITHUB_OUTPUT"
+        run: echo "JSON_DATA='{ \"tag_name\":\"$LATEST_TAG\" }'" >> "$GITHUB_OUTPUT"
       - name: Generate a release
         run: curl -L \
             -request POST \
@@ -64,3 +64,4 @@ jobs:
             --header "Accept:application/vnd.github+json" \
             --header "Authorization:Bearer $TOKEN"
             --data '${{ step.generate-release-note.JSON_DATA }}' 
+
