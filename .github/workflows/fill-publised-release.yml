@@ -37,8 +37,8 @@ jobs:
         run: echo "ALL_TAGS=$(curl \
           --request GET \
           --url "$API_URL/git/refs/tags" \
-          --header "Accept: application/vnd.github+json" \
-          --header "Authorization: Bearer $TOKEN")" >> "$GITHUB_OUTPUT"
+          --header "Accept:application/vnd.github+json" \
+          --header "Authorization:Bearer $TOKEN")" >> "$GITHUB_OUTPUT"
       - id: get-refs
         name: Get refs
         run: echo "REFS_TAGS=$(echo ${{ steps.fetching-tags.outputs.ALL_TAGS }}" | jq "$[].ref")" >> "$GITHUB_OUTPUT"
@@ -61,7 +61,6 @@ jobs:
         run: curl -L \
             -request POST \
             --url "$API_URL/releases/generate-notes" \
-            --header "Accept: application/vnd.github+json" \
-            --header "Authorization: Bearer $TOKEN"
-            https://api.github.com/repos/OWNER/REPO/releases/generate-notes \
-            --data '${{ steps.generate-release-note.JSON_DATA }}' 
+            --header "Accept:application/vnd.github+json" \
+            --header "Authorization:Bearer $TOKEN"
+            --data '${{ step.generate-release-note.JSON_DATA }}' 
