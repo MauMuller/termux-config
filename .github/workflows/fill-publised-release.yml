@@ -30,14 +30,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: [create-url-api]
     steps:
-
       - id: fetching-tags
         env:
           API_URL: ${{ needs.create-url-api.outputs.URL }}
         name: Fetching Tags
         run: |
           REQUEST="$(curl -fSsL --request GET --header "Accept: application/vnd.github+json" --header "Authorization: Bearer $TOKEN" --url "$API_URL/git/refs/tags")"
-          echo "ALL_TAGS=$REQUEST" >> "$GITHUB_OUTPUT"
+          echo $REQUEST
 
       - id: get-refs
         env:
