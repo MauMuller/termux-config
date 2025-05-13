@@ -33,7 +33,7 @@ jobs:
       - id: fetching-tags
         env:
           API_URL: ${{ needs.create-url-api.outputs.URL }}
-        name: Fetching Tags
+        name: Fetching tags and replace break lines (\n) to output
         run: |
           REQUEST="$(curl -fSsL --request GET --header "Accept: application/vnd.github+json" --header "Authorization: Bearer $TOKEN" --url "$API_URL/git/refs/tags")"
           FORMATED_REQUEST=$(echo $REQUEST | sed "s/\n//gi")
@@ -43,7 +43,7 @@ jobs:
         env:
           ALL_TAGS: ${{ steps.fetching-tags.outputs.ALL_TAGS }}
         name: Get refs
-        run: echo "REFS_TAGS=$(echo $ALL_TAGS | jq "$[].ref")" >> "$GITHUB_OUTPUT"
+        run: echo "REFS_TAGS=$(echo "$ALL_TAGS" | jq -e ".[].ref")" >> "$GITHUB_OUTPUT"
 
       - id: get-latest-ref
         env:
