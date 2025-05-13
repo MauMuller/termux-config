@@ -45,14 +45,17 @@ jobs:
         name: Get refs and replace quotes (") for formatation
         run: |
           GET_REFS=$(echo "$ALL_TAGS" | jq -e ".[].ref")
-          FORMATED_REFS=$(echo "$GET_REFS" | sed -E "s/\"//gi")
-          echo "REFS_TAGS=$FORMATED_REFS >> "$GITHUB_OUTPUT"
+          REPLACED_QUOTES=$(echo "$GET_REFS" | sed -E "s/\"//gi")
+          JOINED_REFS=$(echo "$REPLACED_QUOTES" | sed -E "s/\n/%/gi")
+          echo "REFS_TAGS=$JOINED_REFS >> "$GITHUB_OUTPUT"
 
       - id: get-latest-ref
         env:
           REFS_TAGS: ${{ steps.get-refs.outputs.REFS_TAGS }}
-        name: Get latest ref
-        run: echo "LATEST_REF=$(echo $REFS_TAGS | tail -n 1)" >> "$GITHUB_OUTPUT"
+        name: Get latest ref by converting unique ref to multiples lines
+        run: |
+          BREAK_LINES_REFS=$(echo "$REFS_TAGS" | sed -E "s/%/\n/gi")
+          echo "LATEST_REF=$(echo "$BREAK_LINES_REFS" | tail -n 1)" >> "$GITHUB_OUTPUT"
 
       - name: Format lastest and output tag name
         env:
