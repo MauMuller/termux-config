@@ -37,13 +37,16 @@ jobs:
         run: |
           REQUEST="$(curl -fSsL --request GET --header "Accept: application/vnd.github+json" --header "Authorization: Bearer $TOKEN" --url "$API_URL/git/refs/tags")"
           FORMATED_REQUEST=$(echo $REQUEST | sed "s/\n//gi")
-          echo "ALL_TAGS=$FORMATED_REQUEST" >> $GITHUB_OUTPUT
+          echo "ALL_TAGS=$FORMATED_REQUEST" >> "$GITHUB_OUTPUT"
 
       - id: get-refs
         env:
           ALL_TAGS: ${{ steps.fetching-tags.outputs.ALL_TAGS }}
-        name: Get refs
-        run: echo "REFS_TAGS=$(echo "$ALL_TAGS" | jq -e ".[].ref")" >> "$GITHUB_OUTPUT"
+        name: Get refs and replace quotes (") for formatation
+        run: |
+          GET_REFS=$(echo "$ALL_TAGS" | jq -e ".[].ref")
+          FORMATED_REFS=$(echo "$GET_REFS" | sed -E "s/"//gi")
+          echo "REFS_TAGS=$FORMATED_REFS >> "$GITHUB_OUTPUT"
 
       - id: get-latest-ref
         env:
