@@ -29,22 +29,33 @@ jobs:
     name: Get latest tag
     runs-on: ubuntu-latest
     needs: [create-url-api]
-    env:
-      API_URL: ${{ needs.create-url-api.outputs.URL }}
     steps:
+
       - id: fetching-tags
+        env:
+          API_URL: ${{ needs.create-url-api.outputs.URL }}
         name: Fetching Tags
         run: |
           REQUEST="$(curl -fSsL --request GET --header "Accept: application/vnd.github+json" --header "Authorization: Bearer $TOKEN" --url "$API_URL/git/refs/tags")"
           echo "ALL_TAGS=$REQUEST" >> "$GITHUB_OUTPUT"
+
       - id: get-refs
+        env:
+          ALL_TAGS: ${{ steps.fetching-tags.outputs.ALL_TAGS }}
         name: Get refs
-        run: echo "REFS_TAGS=$(echo ${{ steps.fetching-tags.outputs.ALL_TAGS }}" | jq "$[].ref")" >> "$GITHUB_OUTPUT"
+        run: echo "REFS_TAGS=$(echo $ALL_TAGS | jq "$[].ref")" >> "$GITHUB_OUTPUT"
+
       - id: get-latest-ref
+        env:
+          REFS_TAGS: ${{ steps.get-refs.outputs.REFS_TAGS }}
         name: Get latest ref
-        run: echo "LATEST_REF=$(echo ${{ steps.get-refs.outputs.REFS_TAGS }}" | tail -n 1)" >> "$GITHUB_OUTPUT"
+        run: echo "LATEST_REF=$(echo $REFS_TAGS | tail -n 1)" >> "$GITHUB_OUTPUT"
+
       - name: Format lastest and output tag name
-        run: echo "LATEST_TAG=$(echo ${{ steps.get-latest-ref.outputs.LATEST_REF }}" | sed -E "s/.+\///gi")" >> "$GITHUB_OUTPUT"
+        env:
+          LATEST_REF: ${{ steps.get-latest-ref.outputs.LATEST_REF }}
+        run: echo "LATEST_TAG=$(echo $LATEST_REF | sed -E "s/.+\///gi")" >> "$GITHUB_OUTPUT"
+
   generate-release-note:
     name: Generate a release notes
     runs-on: ubuntu-latest
