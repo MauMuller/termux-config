@@ -45,7 +45,7 @@ jobs:
         name: Get refs and replace quotes (") for formatation
         run: |
           GET_REFS=$(echo "$ALL_TAGS" | jq -e ".[].ref")
-          FORMATED_REFS=$(echo "$GET_REFS" | sed -E "s/"//gi")
+          FORMATED_REFS=$(echo "$GET_REFS" | sed -E "s/\"//gi")
           echo "REFS_TAGS=$FORMATED_REFS >> "$GITHUB_OUTPUT"
 
       - id: get-latest-ref
