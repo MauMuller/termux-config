@@ -35,7 +35,7 @@ jobs:
       - id: fetching-tags
         name: Fetching Tags
         run: |
-          REQUEST="$(curl -fSsL --request GET --header "Accept: application/vnd.github+json" --header "Authorization: Bearer $TOKEN" "$API_URL/git/refs/tags")"
+          REQUEST="$(curl -fSsL --request GET --header "Accept: application/vnd.github+json" --header "Authorization: Bearer $TOKEN" --url "$API_URL/git/refs/tags")"
           echo "ALL_TAGS=$REQUEST" >> "$GITHUB_OUTPUT"
       - id: get-refs
         name: Get refs
