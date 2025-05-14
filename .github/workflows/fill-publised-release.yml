@@ -32,16 +32,21 @@ jobs:
     steps:
       - id: get-latest-tag
         name: List TAGS and get latest tag with TAIL
-        run: echo "LATEST_TAG=$(git tag | tail -n 1)" >> "$GITHUB_OUTPUT"
+        run: |
+        ls -lah
+        git --version
+        echo "LATEST_TAG=$(git tag | tail -n 1)" >> "$GITHUB_OUTPUT"
         
       - id: get-latest-release-tag
         name: Get last release linked tag
         env:
           API_URL: ${{ needs.create-url-api.outputs.URL }}
         run: |
-          GET_RELEASE_TAG=$(curl -fSsL --request GET --header "Accept: application/vnd.github+json" --header "Authorization: Bearer $TOKEN" --url "$API_URL/releases?page=1")
+          GET_RELEASE_TAG='$(curl -fSsL --request GET --header "Accept: application/vnd.github+json" --header "Authorization: Bearer $TOKEN" --url "$API_URL/releases?page=1")'
+          echo $GET_RELEASE_TAG
           FORMATED_RELEASE_TAG=$(echo $GET_RELEASE_TAG | jq -e ".[].tag_name" | head -n 1 | sed -E "s/\"//gi")
           echo "LATEST_RELEASE_TAG=$FORMATED_RELEASE_TAG" >> "$GITHUB_OUTPUT"
+
   generate-release-note:
     name: Generate a release notes
     runs-on: ubuntu-latest
