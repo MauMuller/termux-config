@@ -32,7 +32,7 @@ jobs:
     steps:
       - id: get-latest-tag
         name: List TAGS and get latest tag with TAIL
-        run: "LATEST_TAG=$(git tag | tail -n 1)" >> "$GITHUB_OUTPUT"
+        run: echo "LATEST_TAG=$(git tag | tail -n 1)" >> "$GITHUB_OUTPUT"
         
       - id: get-latest-release-tag
         name: Get last release linked tag
