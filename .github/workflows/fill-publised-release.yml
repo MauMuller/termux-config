@@ -45,7 +45,7 @@ jobs:
         name: Get refs and replace quotes (") for formatation
         run: |
           echo "$ALL_TAGS"
-          GET_REFS=$(echo "$ALL_TAGS" | jq -e ".[].ref")
+          GET_REFS=$(echo '$ALL_TAGS' | jq -e ".[].ref")
           echo $GETS_REFS
           REPLACED_QUOTES=$(echo "$GET_REFS" | sed -E "s/\"//gi")
           JOINED_REFS=$(echo "$REPLACED_QUOTES" | sed -E "s/\n/%/gi")
