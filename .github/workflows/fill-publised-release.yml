@@ -25,53 +25,34 @@ jobs:
         run: |
           REPO=$(echo "$OWNER_REPO" | sed -E "s/.+\///gi")  
           echo "URL=$PROTOCOL_AND_DOMAIN/repos/$OWNER/$REPO" >> "$GITHUB_OUTPUT"
-  get-latest-tag:
-    name: Get latest tag
+  get-available-tags:
+    name: Get latest tag and latest release tag
     runs-on: ubuntu-latest
     needs: [create-url-api]
     steps:
-      - id: fetching-tags
+      - id: get-latest-tag
+        name: List TAGS and get latest tag with TAIL
+        run: "LATEST_TAG=$(git tag | tail -n 1)" >> "$GITHUB_OUTPUT"
+        
+      - id: get-latest-release-tag
+        name: Get last release linked tag
         env:
           API_URL: ${{ needs.create-url-api.outputs.URL }}
-        name: Fetching tags and replace break lines (\n) to output
         run: |
-          REQUEST="$(curl -fSsL --request GET --header "Accept: application/vnd.github+json" --header "Authorization: Bearer $TOKEN" --url "$API_URL/git/refs/tags")"
-          FORMATED_REQUEST=$(echo $REQUEST | sed "s/\n//gi")
-          echo "ALL_TAGS=$FORMATED_REQUEST" >> "$GITHUB_OUTPUT"
-
-      - id: get-refs
-        env:
-          ALL_TAGS: ${{ steps.fetching-tags.outputs.ALL_TAGS }}
-        name: Get refs and replace quotes (") for formatation
-        run: |
-          GET_REFS=$(echo '$ALL_TAGS' | jq -e ".[].ref")
-          REPLACED_QUOTES=$(echo "$GET_REFS" | sed -E "s/\"//gi")
-          JOINED_REFS=$(echo "$REPLACED_QUOTES" | sed -E "s/\n/%/gi")
-          echo "REFS_TAGS=$JOINED_REFS >> "$GITHUB_OUTPUT"
-
-      - id: get-latest-ref
-        env:
-          REFS_TAGS: ${{ steps.get-refs.outputs.REFS_TAGS }}
-        name: Get latest ref by converting unique ref to multiples lines
-        run: |
-          BREAK_LINES_REFS=$(echo "$REFS_TAGS" | sed -E "s/%/\n/gi")
-          echo "LATEST_REF=$(echo "$BREAK_LINES_REFS" | tail -n 1)" >> "$GITHUB_OUTPUT"
-
-      - name: Format lastest and output tag name
-        env:
-          LATEST_REF: ${{ steps.get-latest-ref.outputs.LATEST_REF }}
-        run: echo "LATEST_TAG=$(echo $LATEST_REF | sed -E "s/.+\///gi")" >> "$GITHUB_OUTPUT"
-
+          GET_RELEASE_TAG="$(curl -fSsL --request GET --header "Accept: application/vnd.github+json" --header "Authorization: Bearer $TOKEN" --url "$API_URL/releases?page=1")"
+          FORMATED_RELEASE_TAG=$(echo $GET_RELEASE_TAG | jq -e ".[].tag_name" | head -n 1 | sed -E "s/\"//gi")
+          echo "LATEST_RELEASE_TAG=$FORMATED_RELEASE_TAG" >> "$GITHUB_OUTPUT"
   generate-release-note:
     name: Generate a release notes
     runs-on: ubuntu-latest
-    needs: [create-url-api, get-latest-tag]
+    needs: [create-url-api, get-available-tags]
     env:
       API_URL: ${{ needs.create-url-api.outputs.URL }}
-      LATEST_TAG: ${{ needs.create-url-api.outputs.LATEST_TAG }}
+      LATEST_RELEASE_TAG: ${{ needs.get-available-tags.outputs.LATEST_RELEASE_TAG }}
+      LATEST_TAG: ${{ needs.get-available-tags.outputs.LATEST_TAG }}
     steps:
       - name: Mount JSON data
-        run: echo "JSON_DATA='{ \"tag_name\":\"$LATEST_TAG\" }'" >> "$GITHUB_OUTPUT"
+        run: echo "JSON_DATA='{ \"tag_name\":\"$LATEST_TAG\", \"previous_tag_name\": \"$LATEST_RELEASE_TAG\" }'" >> "$GITHUB_OUTPUT"
       - name: Generate a release
         run: curl -L \
             --request POST \
