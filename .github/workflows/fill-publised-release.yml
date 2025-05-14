@@ -60,7 +60,7 @@ jobs:
     steps:
       - id: generate-json-data
         name: Mount JSON data
-        run: echo "JSON_DATA='{ \"tag_name\":\"$LATEST_TAG\", \"previous_tag_name\":\"$LATEST_RELEASE_TAG\" }'" >> "$GITHUB_OUTPUT"
+        run: echo "JSON_DATA='{ \"tag_name\": \"$LATEST_TAG\", \"previous_tag_name\": \"$LATEST_RELEASE_TAG\" }'" >> "$GITHUB_OUTPUT"
 
       - name: Generate a release
         env:
