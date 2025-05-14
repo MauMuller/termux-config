@@ -64,11 +64,11 @@ jobs:
 
       - name: Generate a release
         env:
-          JSON_DATA: ${{ steps.generate-json-data.JSON_DATA }}
+          JSON_DATA: ${{ steps.generate-json-data.outputs.JSON_DATA }}
         run: |
             curl -fsSL \
             --request POST \
             --url "$API_URL/releases/generate-notes" \
-            --header "Accept:application/vnd.github+json" \
-            --header "Authorization:Bearer $TOKEN" \
+            --header "Accept: application/vnd.github+json" \
+            --header "Authorization: Bearer $TOKEN" \
             --data '$JSON_DATA'
