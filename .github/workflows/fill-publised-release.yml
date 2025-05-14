@@ -52,7 +52,7 @@ jobs:
       LATEST_TAG: ${{ needs.get-available-tags.outputs.LATEST_TAG }}
     steps:
       - name: Mount JSON data
-        run: echo "JSON_DATA='{ \"tag_name\":\"$LATEST_TAG\", \"previous_tag_name\": \"$LATEST_RELEASE_TAG\" }'" >> "$GITHUB_OUTPUT"
+        run: echo "JSON_DATA='{ \"tag_name\":\"$LATEST_TAG\", \"previous_tag_name\":\"$LATEST_RELEASE_TAG\" }'" >> "$GITHUB_OUTPUT"
       - name: Generate a release
         run: curl -L \
             --request POST \
