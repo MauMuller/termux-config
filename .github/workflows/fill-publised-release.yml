@@ -58,13 +58,14 @@ jobs:
       LATEST_RELEASE_TAG: ${{ needs.get-available-tags.outputs.LATEST_RELEASE_TAG }}
       LATEST_TAG: ${{ needs.get-available-tags.outputs.LATEST_TAG }}
     steps:
+      - id: generate-json-data
       - name: Mount JSON data
         run: echo "JSON_DATA='{ \"tag_name\":\"$LATEST_TAG\", \"previous_tag_name\":\"$LATEST_RELEASE_TAG\" }'" >> "$GITHUB_OUTPUT"
       - name: Generate a release
         env:
-          JSON_DATA: ${{ steps.generate-release-note.JSON_DATA }}
+          JSON_DATA: ${{ steps.generate-json-data.JSON_DATA }}
         run: |
-            curl -L \
+            curl -fsSL \
             --request POST \
             --url "$API_URL/releases/generate-notes" \
             --header "Accept:application/vnd.github+json" \
