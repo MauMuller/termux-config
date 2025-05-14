@@ -44,7 +44,7 @@ jobs:
           ALL_TAGS: ${{ steps.fetching-tags.outputs.ALL_TAGS }}
         name: Get refs and replace quotes (") for formatation
         run: |
-          GET_REFS='$(echo '$ALL_TAGS' | jq -e ".[].ref")'
+          GET_REFS=$(echo '$ALL_TAGS' | jq -e ".[].ref")
           REPLACED_QUOTES=$(echo "$GET_REFS" | sed -E "s/\"//gi")
           JOINED_REFS=$(echo "$REPLACED_QUOTES" | sed -E "s/\n/%/gi")
           echo "REFS_TAGS=$JOINED_REFS >> "$GITHUB_OUTPUT"
