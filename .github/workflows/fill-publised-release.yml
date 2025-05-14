@@ -44,8 +44,9 @@ jobs:
           API_URL: ${{ needs.create-url-api.outputs.URL }}
         run: |
           GET_RELEASE_TAG=$(curl -fSsL --request GET --header "Accept: application/vnd.github+json" --header "Authorization: Bearer $TOKEN" --url "$API_URL/releases?page=1")
-          echo $GET_RELEASE_TAG
-          FORMATED_RELEASE_TAG=$(echo "$GET_RELEASE_TAG" | jq -e ".[].tag_name" | head -n 1 | sed -E "s/\"//gi")
+          echo "$GET_RELEASE_TAG"
+          echo "passou daqui"
+          FORMATED_RELEASE_TAG=$(echo "$GET_RELEASE_TAG" | jq ".[].tag_name" | head -n 1 | sed -E "s/\"//gi")
           echo "LATEST_RELEASE_TAG=$FORMATED_RELEASE_TAG" >> "$GITHUB_OUTPUT"
 
   generate-release-note:
