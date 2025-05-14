@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - config/actions
-paths:
-  - './*'
 defaults:
   run:
     shell: bash
