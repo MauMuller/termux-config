@@ -43,7 +43,6 @@ jobs:
         name: List TAGS and get latest tag with TAIL
         run: |
           LATEST_TAG=$(echo -e "$(git tag)" | tail -n 1) 
-          echo "$LATEST_TAG"
           echo "LATEST_TAG=$LATEST_TAG" >> "$GITHUB_OUTPUT"
         
       - id: get-latest-release-tag
@@ -52,8 +51,6 @@ jobs:
           API_URL: ${{ needs.create-url-api.outputs.URL }}
         run: |
           GET_RELEASE_TAG=$(curl -fSsL --request GET --header "Accept: application/vnd.github+json" --header "Authorization: Bearer $TOKEN" --url "$API_URL/releases?page=1")
-          echo "$GET_RELEASE_TAG"
-          echo "passou daqui"
           FORMATED_RELEASE_TAG=$(echo "$GET_RELEASE_TAG" | jq ".[].tag_name" | head -n 1 | sed -E "s/\"//gi")
           echo "LATEST_RELEASE_TAG=$FORMATED_RELEASE_TAG" >> "$GITHUB_OUTPUT"
 
@@ -68,7 +65,9 @@ jobs:
     steps:
       - id: generate-json-data
         name: Mount JSON data
-        run: echo "JSON_DATA='{ \"tag_name\":\"$LATEST_TAG\", \"previous_tag_name\":\"$LATEST_RELEASE_TAG\" }'" >> "$GITHUB_OUTPUT"
+        run: |
+          echo ${{ needs.get-available-tags.outputs }}
+          echo "JSON_DATA='{ \"tag_name\":\"$LATEST_TAG\", \"previous_tag_name\":\"$LATEST_RELEASE_TAG\" }'" >> "$GITHUB_OUTPUT"
 
       - name: Generate a release
         env:
