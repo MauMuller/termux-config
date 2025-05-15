@@ -38,7 +38,10 @@ jobs:
       
       - name: teste with checkout
         uses: actions/checkout@v4
-        run: ls -lah
+
+      - name: after checkout
+        run: |
+          ls -lah 
 
       - id: get-latest-tag
         name: List TAGS and get latest tag with TAIL
