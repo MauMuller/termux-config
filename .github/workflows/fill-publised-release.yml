@@ -32,9 +32,13 @@ jobs:
     steps:
       - id: get-latest-tag
         name: List TAGS and get latest tag with TAIL
+        env:
+          PATH_REPO: ${{ github.action_ref }}
         run: |
           ls -lah
+          echo "$PATH_REPO"
           git --version
+          echo "${{ github }}"
 
           echo "LATEST_TAG=$(git tag | tail -n 1)" >> "$GITHUB_OUTPUT"
         
