@@ -32,6 +32,8 @@ jobs:
     steps:
       - name: get repository context
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: after checkout
         run: |
