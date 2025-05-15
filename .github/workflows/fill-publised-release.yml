@@ -41,6 +41,7 @@ jobs:
         name: List TAGS and get latest tag with TAIL
         run: |
           LATEST_TAG=$(echo -e "$(git tag)" | tail -n 1) 
+          echo "$LATEST_TAG"
           echo "LATEST_TAG=$LATEST_TAG" >> "$GITHUB_OUTPUT"
         
       - id: get-latest-release-tag
