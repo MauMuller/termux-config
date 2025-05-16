@@ -72,7 +72,7 @@ jobs:
       - id: generate-json-data
         name: Mount JSON data
         run: |
-          DATA='{\"tag_name\":\"$LATEST_TAG\"}'
+          DATA='{"tag_name": "$LATEST_TAG"}'
 
           if [ "$LATEST_RELEASE_TAG" ]
             then DATA=$(echo $JSON_DATA | jq '.previous_tag_name += "$LATEST_RELEASE_TAG"')
