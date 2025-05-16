@@ -88,6 +88,7 @@ jobs:
             curl -SLi \
             --request POST \
             --url "$API_URL/releases/generate-notes" \
+            --header "Content-Type: application/json" \
             --header "Accept: application/vnd.github+json" \
             --header "Authorization: Bearer $TOKEN" \
-            --data $JSON_DATA
+            --data '$JSON_DATA'
