@@ -29,6 +29,9 @@ jobs:
     name: Get latest tag and latest release tag
     runs-on: ubuntu-latest
     needs: [create-url-api]
+    outputs:
+      LATEST_TAG: ${{ steps.get-latest-tag.outputs.LATEST_TAG }}
+      LATEST_RELEASE_TAG: ${{ steps.get-latest-release-tag.outputs.LATEST_RELEASE_TAG }}
     steps:
       - name: get repository context
         uses: actions/checkout@v4
