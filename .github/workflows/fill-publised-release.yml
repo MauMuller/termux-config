@@ -85,7 +85,7 @@ jobs:
           JSON_DATA: ${{ steps.generate-json-data.outputs.JSON_DATA }}
           TOKEN: ${{ github.token }}
         run: |
-            curl -fsSLi \
+            curl -fSLi \
             --request POST \
             --url "$API_URL/releases/generate-notes" \
             --header "Accept: application/vnd.github+json" \
