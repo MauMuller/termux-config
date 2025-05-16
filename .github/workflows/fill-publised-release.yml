@@ -51,6 +51,7 @@ jobs:
       - id: get-latest-release-tag
         name: Get last release linked tag
         env:
+          TOKEN: ${{ github.token }}
           API_URL: ${{ needs.create-url-api.outputs.URL }}
         run: |
           GET_RELEASE_TAG=$(curl -fSsL --request GET --header "Accept: application/vnd.github+json" --header "Authorization: Bearer $TOKEN" --url "$API_URL/releases?page=1")
@@ -69,11 +70,12 @@ jobs:
       - id: generate-json-data
         name: Mount JSON data
         run: |
-          echo "JSON_DATA='{ \"tag_name\":\"$LATEST_TAG\", \"previous_tag_name\":\"$LATEST_RELEASE_TAG\" }'" >> "$GITHUB_OUTPUT"
+          echo "JSON_DATA='{\"tag_name\":\"$LATEST_TAG\",\"previous_tag_name\":\"$LATEST_RELEASE_TAG\"}'" >> "$GITHUB_OUTPUT"
 
       - name: Generate a release
         env:
           JSON_DATA: ${{ steps.generate-json-data.outputs.JSON_DATA }}
+          TOKEN: ${{ github.token }}
         run: |
             curl -fsSL \
             --request POST \
