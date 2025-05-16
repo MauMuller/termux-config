@@ -69,7 +69,6 @@ jobs:
       - id: generate-json-data
         name: Mount JSON data
         run: |
-          echo ${{ fromJson(needs.get-available-tags.outputs) }}
           echo "JSON_DATA='{ \"tag_name\":\"$LATEST_TAG\", \"previous_tag_name\":\"$LATEST_RELEASE_TAG\" }'" >> "$GITHUB_OUTPUT"
 
       - name: Generate a release
