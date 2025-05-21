@@ -1,4 +1,4 @@
-ngame: Fill last published release
+name: Fill last published release
 on: 
   workflow_dispatch:
   push:
