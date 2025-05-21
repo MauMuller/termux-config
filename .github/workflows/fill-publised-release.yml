@@ -85,6 +85,7 @@ jobs:
           JSON_DATA: ${{ steps.generate-json-data.outputs.JSON_DATA }}
           TOKEN: ${{ github.token }}
         run: |
+            echo $JSON_DATA
             curl -SLi \
             --request POST \
             --url "$API_URL/releases/generate-notes" \
