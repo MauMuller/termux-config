@@ -3,12 +3,14 @@ changelog:
     - title: Features 
       labels:
         - feature
+        - feat
     - title: Refactores
       labels:
         - refactor
     - title: Bugfixs
       labels:
         - bugfix
+        - fix
     - title: Others
       labels:
         - '*'
