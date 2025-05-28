@@ -3,7 +3,8 @@ on:
   workflow_dispatch:
 
 defaults:
-  shell: bash
+  run:
+    shell: bash
 
 jobs:
   get-latest-tag-name-release:
