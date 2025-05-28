@@ -43,8 +43,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [get-latest-tag-name-release, get-markdown-exemple]
     env:
-      RELEASE_EXEMPLE: ${{ steps.get-markdown.RELEASE_EXEMPLE }}
-      LATEST_TAG: ${{ steps.get-latest-tag.outputs.LATEST_TAG }}
+      RELEASE_EXEMPLE: ${{ needs.get-markdown-exemple.outputs.RELEASE_TAG}}
+      LATEST_TAG: ${{ needs.get-latest-tag-name-release.outputs.LATEST_TAG }}
     steps:
       - name: show envs
         run: |
