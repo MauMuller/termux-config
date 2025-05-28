@@ -1,18 +1,96 @@
 name: Fill last published release
-on: workflow_dispatch
-
+on: 
+  workflow_dispatch:
+  push:
+    branches:
+      - config/actions
 defaults:
   run:
     shell: bash
-
-# Obter último commit com release
-# pegar todos os commits feitos a partir desse
-# preencher a nova release criada
-
+env:
+  TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
-  get-last-release:
-    name: Get last release
-    runs-on: ubuntu-24.02
+  create-url-api:
+    name: Create a URL to fetch data
+    runs-on: ubuntu-latest
+    env:
+      PROTOCOL_AND_DOMAIN: ${{ github.api_url }}
+      OWNER_REPO: ${{ github.repository }}
+      OWNER: ${{ github.repository_owner }}
+    outputs:
+      URL: ${{ steps.creation.outputs.URL }}
     steps:
-      - name: Get all tags
-        run: echo "${{ github.api_url }}/repost/MauMuller/releases"
+      - id: creation
+        name: Creating URL formatting GITHUB_REPOSITORY
+        run: |
+          REPO=$(echo "$OWNER_REPO" | sed -E "s/.+\///gi")  
+          echo "URL=$PROTOCOL_AND_DOMAIN/repos/$OWNER/$REPO" >> "$GITHUB_OUTPUT"
+  get-available-tags:
+    name: Get latest tag and latest release tag
+    runs-on: ubuntu-latest
+    needs: [create-url-api]
+    outputs:
+      LATEST_TAG: ${{ steps.get-latest-tag.outputs.LATEST_TAG }}
+      LATEST_RELEASE_TAG: ${{ steps.get-latest-release-tag.outputs.LATEST_RELEASE_TAG }}
+    steps:
+      - name: get repository context
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: after checkout
+        run: |
+          ls -lah 
+
+      - id: get-latest-tag
+        name: List TAGS and get latest tag with TAIL
+        run: |
+          LATEST_TAG=$(echo -e "$(git tag)" | tail -n 1) 
+          echo "LATEST_TAG=$LATEST_TAG" >> "$GITHUB_OUTPUT"
+        
+      - id: get-latest-release-tag
+        name: Get last release linked tag
+        env:
+          TOKEN: ${{ github.token }}
+          API_URL: ${{ needs.create-url-api.outputs.URL }}
+        run: |
+          GET_RELEASE_TAG=$(curl -fSsL --request GET --header "Accept: application/vnd.github+json" --header "Authorization: Bearer $TOKEN" --url "$API_URL/releases?page=1")
+          FORMATED_RELEASE_TAG=$(echo "$GET_RELEASE_TAG" | jq ".[].tag_name" | head -n 1 | sed -E "s/\"//gi")
+          echo "LATEST_RELEASE_TAG=$FORMATED_RELEASE_TAG" >> "$GITHUB_OUTPUT"
+
+  generate-release-note:
+    name: Generate a release notes
+    runs-on: ubuntu-latest
+    needs: [create-url-api, get-available-tags]
+    permissions:
+      contents: write
+    env:
+      API_URL: ${{ needs.create-url-api.outputs.URL }}
+      LATEST_RELEASE_TAG: ${{ needs.get-available-tags.outputs.LATEST_RELEASE_TAG }}
+      LATEST_TAG: ${{ needs.get-available-tags.outputs.LATEST_TAG }}
+    steps:
+      - id: generate-json-data
+        name: Mount JSON data
+        run: |
+          DATA="{\"tag_name\":\"$(echo $LATEST_TAG)\"}"
+
+          if [ "$LATEST_RELEASE_TAG" ]
+            then DATA=$(echo $JSON_DATA | jq '.previous_tag_name += "$LATEST_RELEASE_TAG"')
+          fi
+
+          echo "$DATA"
+          echo "JSON_DATA=$DATA" >> "$GITHUB_OUTPUT"
+
+      - name: Generate a release
+        env:
+          JSON_DATA: ${{ steps.generate-json-data.outputs.JSON_DATA }}
+          TOKEN: ${{ github.token }}
+        run: |
+            echo "$JSON_DATA"
+            curl -SLi \
+            --request POST \
+            --url "$API_URL/releases/generate-notes" \
+            --header "Content-Type: application/json" \
+            --header "Accept: application/vnd.github+json" \
+            --header "Authorization: Bearer $TOKEN" \
+            --json "$JSON_DATA"
