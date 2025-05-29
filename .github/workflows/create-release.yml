@@ -23,7 +23,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           LATEST_RELEASE_TAG="$(gh release list -O desc --json tagName --jq ".[].tagName" -L 1)"
-          AVAILABLE_TAG="$(git tag --sort version:refname | grep -A 1 "$LATEST_RELEASE_TAG" | tail -n 1)"
+          AVAILABLE_TAG="$(git tag --sort version:refname | grep -A 1 "$(echo $LATEST_RELEASE_TAG)" | tail -n 1)"
 
           if [ ! "$AVAILABLE_TAG" ]
             then exit 1;
@@ -33,8 +33,6 @@ jobs:
 
       - id: get-markdown-template
         name: get markdown from git project
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           RELEASE_EXEMPLE="$(cat .github/release.md)"
           echo 'RELEASE_EXEMPLE="$RELEASE_EXEMPLE' >> "$GITHUB_OUTPUT"
