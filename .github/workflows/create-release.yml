@@ -33,7 +33,7 @@ jobs:
   create-release:
     name: generate release
     runs-on: ubuntu-latest
-    needs: [get-latest-tag-name-release, get-markdown-exemple]
+    needs: [get-repo-features]
     env:
       RELEASE_EXEMPLE: ${{ needs.get-repo-features.outputs.RELEASE_TAG}}
       LATEST_TAG: ${{ needs.get-repo-features.outputs.LATEST_TAG }}
