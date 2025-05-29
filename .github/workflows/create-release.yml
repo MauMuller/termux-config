@@ -36,7 +36,7 @@ jobs:
     needs: [get-latest-tag-name-release, get-markdown-exemple]
     env:
       RELEASE_EXEMPLE: ${{ needs.get-repo-features.outputs.RELEASE_TAG}}
-      LATEST_TAG: ${{ needs.get-repo-features..outputs.LATEST_TAG }}
+      LATEST_TAG: ${{ needs.get-repo-features.outputs.LATEST_TAG }}
     steps:
       - name: show envs
         run: |
