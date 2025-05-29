@@ -15,7 +15,7 @@ jobs:
       RELEASE_EXEMPLE: ${{ steps.get-markdown-template.outputs.RELEASE_EXEMPLE }}
     steps:
       - name: repo access
-        uses: checkout@v4
+        uses: actions/checkout@v4
 
       - id: get-latest-tag-name-release
         name: get latest tag name release
