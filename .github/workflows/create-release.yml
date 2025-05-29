@@ -11,7 +11,7 @@ jobs:
     name: repository files access to get values
     runs-on: ubuntu-latest
     outputs:
-      LASTEST_TAG: ${{ steps.get-latest-tag-name-release.outputs.LATEST_TAG }}
+      LATEST_TAG: ${{ steps.get-latest-tag-name-release.outputs.LATEST_TAG }}
       RELEASE_EXEMPLE: ${{ steps.get-markdown-template.outputs.RELEASE_EXEMPLE }}
     steps:
       - name: repo access
@@ -27,8 +27,9 @@ jobs:
 
       - id: get-markdown-template
         name: get markdown from git project
-        run:
-          echo 'RELEASE_EXEMPLE="$(cat .github/release.md)"' >> "$GITHUB_OUTPUT"
+        run: |
+          RELEASE_EXEMPLE="$(cat .github/release.md)"
+          echo 'RELEASE_EXEMPLE="$RELEASE_EXEMPLE' >> "$GITHUB_OUTPUT"
 
   create-release:
     name: generate release
