@@ -16,6 +16,7 @@ jobs:
     steps:
       - name: repo access
         uses: actions/checkout@v4
+          fetch-tags: true
 
       - id: get-latest-tag-name-release
         name: get latest tag name release
@@ -34,8 +35,8 @@ jobs:
           echo "$AVAILABLE_TAG"
 
           if [ ! "$AVAILABLE_TAG" ]
-            then exit 1;
-          fi;
+            then exit 1
+          fi
 
           echo "LATEST_TAG=$AVAILABLE_TAG" >> "$GITHUB_OUTPUT"
 
