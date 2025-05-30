@@ -7,44 +7,52 @@ defaults:
     shell: bash
 
 jobs:
-  get-latest-tag-name-release:
-    name: get latest tag name release
+  get-repo-features:
+    name: repository files access to get values
     runs-on: ubuntu-latest
     outputs:
-      LASTEST_TAG: ${{ steps.get-latest-tag.outputs.LATEST_TAG }}
+      LATEST_TAG: ${{ steps.get-latest-tag-name-release.outputs.LATEST_TAG }}
+      RELEASE_EXEMPLE: ${{ steps.get-markdown-template.outputs.RELEASE_EXEMPLE }}
     steps:
-      - id: get-latest-tag
-        name: Get project RELEASE
+      - name: repo access
+        uses: actions/checkout@v4
+          fetch-tags: true
+
+      - id: get-latest-tag-name-release
+        name: get latest tag name release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ls -lah
-          LATEST_TAG=$(gh release list -O desc --json tagName --jq ".[].tagName" -L 1)
-          echo "LATEST_TAG=$LAST_RELEASE" >> "$GITHUB_OUTPUT"
+          LATEST_RELEASE_TAG="$(gh release list -O desc --json tagName --jq ".[].tagName" -L 1)"
 
-  get-markdown-exemple:
-    name: get markdown exemple
-    runs-on: ubuntu-latest
-    outputs:
-      RELEASE_EXEMPLE: ${{ steps.get-markdown.outputs.RELEASE_EXEMPLE }}
-    steps:
-      - name: Get repo access
-        uses: actions/checkout@v4
+          echo "$LATEST_RELEASE_TAG"
 
-      - name: testing
-        run: ls -lah
+          git tag --sort version:refname 
+          echo "$LATEST_RELEASE_TAG"
 
-      - id: get-markdown
-        name: Get Release
-        run: echo "RELEASE_EXEMPLE=$(cat .github/release.md)" >> "$GITHUB_OUTPUT"
+          AVAILABLE_TAG="$(git tag --sort version:refname | grep -A 1 "$(echo "$LATEST_RELEASE_TAG")" | tail -n 1)"
+
+          echo "$AVAILABLE_TAG"
+
+          if [ ! "$AVAILABLE_TAG" ]
+            then exit 1
+          fi
+
+          echo "LATEST_TAG=$AVAILABLE_TAG" >> "$GITHUB_OUTPUT"
+
+      - id: get-markdown-template
+        name: get markdown from git project
+        run: |
+          RELEASE_EXEMPLE="$(cat .github/release.md)"
+          echo 'RELEASE_EXEMPLE="$RELEASE_EXEMPLE' >> "$GITHUB_OUTPUT"
 
   create-release:
     name: generate release
     runs-on: ubuntu-latest
-    needs: [get-latest-tag-name-release, get-markdown-exemple]
+    needs: [get-repo-features]
     env:
-      RELEASE_EXEMPLE: ${{ steps.get-markdown.RELEASE_EXEMPLE }}
-      LATEST_TAG: ${{ steps.get-latest-tag.outputs.LATEST_TAG }}
+      RELEASE_EXEMPLE: ${{ needs.get-repo-features.outputs.RELEASE_TAG}}
+      LATEST_TAG: ${{ needs.get-repo-features.outputs.LATEST_TAG }}
     steps:
       - name: show envs
         run: |

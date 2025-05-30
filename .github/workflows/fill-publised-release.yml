@@ -1,9 +1,6 @@
 name: Fill last published release
 on: 
   workflow_dispatch:
-  push:
-    branches:
-      - config/actions
 defaults:
   run:
     shell: bash
