@@ -26,8 +26,6 @@ jobs:
         run: |
           LATEST_RELEASE_TAG="$(gh release list -O desc --json tagName --jq ".[].tagName" -L 1)"
 
-          echo "$LATEST_RELEASE_TAG"
-
           git tag --sort version:refname 
           echo "$LATEST_RELEASE_TAG"
 

@@ -2,6 +2,15 @@ name: teste
 run-name: testeeee
 on:
   workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'kkkkkkkkkk'
+        required: true
+        default: 'v1'
+      tags:
+        description: 'choose a tag:'
+        type: string
+        required: true
 jobs:
   teste-job:
     runs-on: ubuntu-latest
