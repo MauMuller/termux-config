@@ -1,0 +1,10 @@
+name: teste
+run-name: testeeee
+on:
+  workflow_dispatch:
+jobs:
+  teste-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: teste
+        run: echo "testeeeeeeee"
