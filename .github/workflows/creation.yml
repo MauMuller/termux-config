@@ -19,5 +19,3 @@ jobs:
         run: |
           echo ${{ inputs.tag-start }}
           echo ${{ inputs.tag-end }}
-          
-        run: echo "testeeeeeeee"
