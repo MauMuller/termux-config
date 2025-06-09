@@ -3,12 +3,12 @@ run-name: testeeee
 on:
   workflow_dispatch:
     inputs:
-      logLevel:
-        description: 'kkkkkkkkkk'
-        required: true
-        default: 'v1'
-      tags:
-        description: 'choose a tag:'
+      start-tag:
+        description: 'Type START tag to show commits:'
+        type: string
+        required: false
+      tag-end:
+        description: 'Type END tag to show commits:'
         type: string
         required: true
 jobs:
@@ -16,4 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: teste
+        run: |
+          echo ${{ inputs.tag-start }}
+          echo ${{ inputs.tag-end }}
+          
         run: echo "testeeeeeeee"
