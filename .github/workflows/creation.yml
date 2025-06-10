@@ -30,6 +30,9 @@ jobs:
         run: |
           START_TAG="${{ inputs.start-tag }}"
           
+          git --version
+          git tag | cat
+          
           if [ ! "$START_TAG" ]
             then            
               LATEST_RELEASE_TAG="$(gh release list -O desc --json tagName --jq ".[].tagName" -L 1)"
