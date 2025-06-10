@@ -38,7 +38,7 @@ jobs:
               git tag --sort version:refname | grep -A 1 "$(echo "$LATEST_RELEASE_TAG")"
               echo $LATEST_RELEASE_TAG
               echo $START_TAG
-          fi;
+          fi
 
           git tag --sort version:refname
           git tag --sort version:refname | grep -A 1 "$(echo "$LATEST_RELEASE_TAG")"
