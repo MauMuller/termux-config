@@ -20,7 +20,7 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Get repo access
-        if: ${{ inputs.start-tag == "" }}
+        if: "${{ github.event.inputs.start-tag == '' }}"
         uses: actions/checkout@v4
         with:
           fetch-tags: true
