@@ -46,19 +46,19 @@ jobs:
     runs-on: ubuntu-latest
     needs: [get-start-range-tag]
     env:
-      TEMPLATE: ${{ steps.get-template.outputs.TEMPLATE }}
       START_TAG: ${{ needs.get-start-range-tag.outputs.START_TAG }}
       END_TAG: ${{ inputs.end-tag }}
       TEMP_PATH: ".github/temp/"
       TEMP_FILE: "release.md"
     steps:
-      - id: get-template
-        name: Get template
+      - name: Get template
         run: |
           TEMPLATE="@{refactor}=- %s\n"
-          echo "TEMPLATE=$TEMPLATE" >> "GITHUB_OUTPUT"
+          echo "TEMPLATE=$TEMPLATE" >> "GITHUB_ENV"
 
       - name: Create release temporary
+        env: 
+          TEMPLATE: ${{ env.TEMPLATE }}
         run: |
           RELEASE_BODY="$(echo $TEMPLATE | sed -E "s/@\{(.+)\}\=(.+)/git log --format='\\2' $START_TAG...$END_TAG | grep -Pi '\\1'/gie")"
           echo $RELEASE_BODY
