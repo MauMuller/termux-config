@@ -1,5 +1,5 @@
-name: teste
-run-name: testeeee
+name: Create a release
+run-name: creation of release
 on:
   workflow_dispatch:
     inputs:
@@ -7,15 +7,44 @@ on:
         description: 'Type START tag to show commits:'
         type: string
         required: false
-      tag-end:
+      end-tag:
         description: 'Type END tag to show commits:'
         type: string
         required: true
 jobs:
-  teste-job:
+  manage-start-tag:
     runs-on: ubuntu-latest
+    outputs:
+      START_TAG: ${{ steps.get-tag.outputs.START_TAG }}
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Get repo access
+        if: ${{ inputs.start-tag == "" }}
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+          
+      - id: get-tag
+        name: Get inputed start tag
+        run: |
+          START_TAG="${{ inputs.start-tag }}"
+          
+          if [ ! "$START_TAG" ]
+            then            
+              LATEST_RELEASE_TAG="$(gh release list -O desc --json tagName --jq ".[].tagName" -L 1)"
+              START_TAG="$(git tag --sort version:refname | grep -A 1 "$(echo "$LATEST_RELEASE_TAG")" | tail -n 1)"
+          fi;
+          
+          echo "START_TAG=$START_TAG" >> "$GITHUB_OUTPUT"
+          
+  show-found-tags:
+    runs-on: ubuntu-latest
+    needs: [manage-start-tag]
+    env:
+      START_TAG: ${{ needs.manage-start-tag.outputs.START_TAG }}
     steps:
       - name: teste
         run: |
-          echo ${{ inputs.tag-start }}
-          echo ${{ inputs.tag-end }}
+          echo $START_TAG
+          echo ${{ inputs.end-tag }}
