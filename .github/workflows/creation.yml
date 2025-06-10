@@ -23,6 +23,7 @@ jobs:
         if: "${{ github.event.inputs.start-tag == '' }}"
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           fetch-tags: true
           
       - id: get-tag
