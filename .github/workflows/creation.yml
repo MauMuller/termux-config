@@ -15,7 +15,7 @@ jobs:
   get-start-range-tag:
     runs-on: ubuntu-latest
     outputs:
-      START_TAG: ${{ steps.get-tag.outputs.START_TAG }}
+      START_TAG: "${{ steps.get-tag.outputs.START_TAG }}"
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
