@@ -34,7 +34,13 @@ jobs:
             then            
               LATEST_RELEASE_TAG="$(gh release list -O desc --json tagName --jq ".[].tagName" -L 1)"
               START_TAG="$(git tag --sort version:refname | grep -A 1 "$(echo "$LATEST_RELEASE_TAG")" | tail -n 1)"
+              echo $LATEST_RELEASE_TAG
+              echo $START_TAG
           fi;
+          
+          if [ ! "$START_TAG" ]
+            then exit 1
+          fi
           
           echo "START_TAG=$START_TAG" >> "$GITHUB_OUTPUT"
           
