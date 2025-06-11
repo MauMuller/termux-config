@@ -51,19 +51,19 @@ jobs:
       TEMP_PATH: ".github/temp/"
       TEMP_FILE: "release.md"
     steps:
-      - name: Get template
+      - id: get-template 
+        name: Get template
         run: |
           TEMPLATE="@{refactor}=- %s\n"
-          echo "TEMPLATE=$TEMPLATE" >> "GITHUB_ENV"
+          echo "TEMPLATE=$TEMPLATE" >> "$GITHUB_OUTPUT"
 
-      - name: Create release temporary
+      - name: Create temporary release
         env: 
-          TEMPLATE: ${{ env.TEMPLATE }}
+          TEMPLATE: ${{ steps.get-template.outputs.TEMPLATE }}
         run: |
+          ls
           RELEASE_BODY="$(echo $TEMPLATE | sed -E "s/@\{(.+)\}\=(.+)/git log --format='\\2' $START_TAG...$END_TAG | grep -Pi '\\1'/gie")"
           echo $RELEASE_BODY
-          mkdir -p $TEMP_PATH
-          echo "$RELEASE_BODY" > "$TEMP_PATH/$TEMP_FILE"
 
   show-found-tags:
     runs-on: ubuntu-latest
