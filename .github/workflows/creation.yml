@@ -63,7 +63,6 @@ jobs:
     needs: [get-tags]
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    env:
       START_TAG: ${{ needs.get-tags.outputs.START_TAG }}
       END_TAG: ${{ needs.get-tags.outputs.END_TAG }}
       TEMP_PATH: ".github/temp"
