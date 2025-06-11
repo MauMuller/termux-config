@@ -17,6 +17,7 @@ jobs:
     steps:
       - name: repo access
         uses: actions/checkout@v4
+        with:
           fetch-tags: true
 
       - id: get-latest-tag-name-release
