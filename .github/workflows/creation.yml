@@ -89,3 +89,5 @@ jobs:
 
       - name: Create release
         run: gh release create $END_TAG -F "$TEMP_PATH/$TEMP_FILE"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
