@@ -33,7 +33,7 @@ jobs:
 
           if [ ! "$(git tag | grep -Eio "^$END_TAG$")" ]
             then 
-              echo "Tag typed ($END_TAG) wasnt find at project tag's list."
+              echo -e"\nTag typed ($END_TAG) wasnt find at project tag's list.\n"
               exit 1
           fi
 
@@ -52,7 +52,7 @@ jobs:
           
           if [ ! "$(git tag | grep -Eio "^$START_TAG$")" ]
             then 
-              echo "Tag typed ($START_TAG) wasnt find at project tag's list."
+              echo -e "\nTag typed ($START_TAG) wasnt find at project tag's list.\n"
               exit 1
           fi
           
