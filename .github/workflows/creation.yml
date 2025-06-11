@@ -84,6 +84,7 @@ jobs:
           TEMPLATE: ${{ steps.get-template.outputs.TEMPLATE }}
         run: |
           RELEASE_BODY="$(echo $TEMPLATE | sed -E "s/@\{(.+)\}\=(.+)/git log --format='\\2' $START_TAG...$END_TAG | grep -Pi '\\1'/gie")"
+          mkdir -p "$TEMP_PATH"
           echo "$RELEASE_BODY" > "$TEMP_PATH/$TEMP_FILE"
 
       - name: Create release
