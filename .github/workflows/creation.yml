@@ -36,8 +36,10 @@ jobs:
               START_TAG="$(git tag --sort version:refname | grep -A 1 "$(echo "$LATEST_RELEASE_TAG")" | tail -n 1)"
           fi
           
-          if [ ! "$START_TAG" ]
-            then exit 1
+          if [ ! git tag | grep -Eio "^$START_TAG$" ]
+            then 
+              echo "Tag doesnt found"
+              exit 1
           fi
           
           echo "START_TAG=$START_TAG" >> "$GITHUB_OUTPUT"
@@ -66,7 +68,6 @@ jobs:
         env: 
           TEMPLATE: ${{ steps.get-template.outputs.TEMPLATE }}
         run: |
-          ls
           RELEASE_BODY="$(echo $TEMPLATE | sed -E "s/@\{(.+)\}\=(.+)/git log --format='\\2' $START_TAG...$END_TAG | grep -Pi '\\1'/gie")"
           echo $RELEASE_BODY
 
