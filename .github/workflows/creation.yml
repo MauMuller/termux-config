@@ -36,7 +36,7 @@ jobs:
               START_TAG="$(git tag --sort version:refname | grep -A 1 "$(echo "$LATEST_RELEASE_TAG")" | tail -n 1)"
           fi
           
-          if [ ! git tag | grep -Eio "^$START_TAG$" ]
+          if [ ! "$(git tag | grep -Eio "^$START_TAG$")" ]
             then 
               echo "Tag doesnt found"
               exit 1
