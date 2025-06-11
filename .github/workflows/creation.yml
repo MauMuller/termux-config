@@ -75,6 +75,9 @@ jobs:
 
       - name: Get repo access
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
 
       - name: Create temporary release
         env: 
