@@ -57,6 +57,9 @@ jobs:
           TEMPLATE="@{refactor}=- %s\n"
           echo "TEMPLATE=$TEMPLATE" >> "$GITHUB_OUTPUT"
 
+      - name: Get repo access
+        uses: actions/checkout@v4
+
       - name: Create temporary release
         env: 
           TEMPLATE: ${{ steps.get-template.outputs.TEMPLATE }}
