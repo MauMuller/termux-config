@@ -88,4 +88,4 @@ jobs:
           echo "$RELEASE_BODY" > "$TEMP_PATH/$TEMP_FILE"
 
       - name: Create release
-        run: gh relase create $END_TAG -F "$TEMP_PATH/$TEMP_FILE"
+        run: gh release create $END_TAG -F "$TEMP_PATH/$TEMP_FILE"
