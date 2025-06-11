@@ -79,21 +79,12 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Create temporary release
+      - name: Create temporary makdown file
         env: 
           TEMPLATE: ${{ steps.get-template.outputs.TEMPLATE }}
         run: |
           RELEASE_BODY="$(echo $TEMPLATE | sed -E "s/@\{(.+)\}\=(.+)/git log --format='\\2' $START_TAG...$END_TAG | grep -Pi '\\1'/gie")"
-          echo $RELEASE_BODY
+          echo "$RELEASE_BODY" > "$TEMP_PATH/$TEMP_FILE"
 
-  show-found-tags:
-    runs-on: ubuntu-latest
-    needs: [get-tags]
-    env:
-      START_TAG: ${{ needs.get-tags.outputs.START_TAG }}
-      END_TAG: ${{ needs.get-tags.outputs.END_TAG }}
-    steps:
-      - name: Show variables
-        run: |
-          echo $START_TAG
-          echo $END_TAG
+      - name: Create release
+        run: gh relase create $END_TAG -F "$TEMP_PATH/$TEMP_FILE"
