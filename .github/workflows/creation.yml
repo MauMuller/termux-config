@@ -64,7 +64,7 @@ jobs:
     env:
       START_TAG: ${{ needs.get-tags.outputs.START_TAG }}
       END_TAG: ${{ needs.get-tags.outputs.END_TAG }}
-      TEMP_PATH: ".github/temp/"
+      TEMP_PATH: ".github/temp"
       TEMP_FILE: "release.md"
     steps:
       - id: get-template 
